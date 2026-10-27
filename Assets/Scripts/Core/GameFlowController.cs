@@ -1,0 +1,556 @@
+using System;
+using UnityEngine;
+
+namespace SeaOfMemories
+{
+    public sealed class GameFlowController : MonoBehaviour
+    {
+        [SerializeField] private ScenarioRepository repository;
+        [SerializeField] private TextAsset scenario;
+        [SerializeField] private DialoguePlayer dialogue;
+        [SerializeField] private UiInputRouter input;
+        [SerializeField] private GameObject titlePanel;
+        [SerializeField] private GameObject dialoguePanel;
+        [SerializeField] private GameObject roomPanel;
+        [SerializeField] private GameObject closeupPanel;
+        [SerializeField] private ExplorationController exploration;
+        [SerializeField] private ContentCatalog catalog;
+        [SerializeField] private GameObject inspectionPanel;
+        [SerializeField] private GameObject introNote;
+        [SerializeField] private InventoryPanel inventory;
+        [SerializeField] private GameObject questionPanel;
+        [SerializeField] private InterrogationController interrogation;
+        [SerializeField] private GameObject badEndingPanel;
+        [SerializeField] private GameObject trueEndingPanel;
+        [SerializeField] private ScreenEffects effects;
+        [SerializeField] private AudioController audioController;
+        [SerializeField] private BackgroundView backgroundView;
+        public void ConfigureBackground(BackgroundView view) { backgroundView = view; }
+        public void ConfigureAudio(AudioController controller) { audioController = controller; }
+
+        private readonly GameSession session = new GameSession();
+        private bool ready;
+        private string transitionTarget;
+        private Action transitionCoveredAction;
+        private Action transitionFinishedAction;
+        private bool transitionCovered;
+        private bool effectsSubscribed;
+        public GamePhase Phase => session.Phase;
+        internal GameSession Session => session;
+        public string CurrentFurnitureId => session.CurrentFurnitureId;
+        public bool HasItem(string itemId) { return session.HasItem(itemId); }
+        public bool IsInventoryFull() { return session.IsInventoryFull(); }
+        public bool IsItemDetailsOpen => inventory != null && inventory.IsDetailsOpen;
+        public bool IsTransitioning => session.Phase == GamePhase.Transition || (effects != null && effects.IsBusy);
+        public void ConfigureFades(ScreenEffects screenEffects) { effects = screenEffects; }
+
+        public bool CanReadInventory()
+        {
+            if (!ready || IsTransitioning || IsItemDetailsOpen || session.QuestionCount >= 3) return false;
+            switch (session.Phase)
+            {
+                case GamePhase.Intro:
+                case GamePhase.Room:
+                case GamePhase.Closeup:
+                case GamePhase.Inspecting:
+                case GamePhase.ItemChoice:
+                case GamePhase.PickupReaction:
+                case GamePhase.GuardReturn:
+                case GamePhase.InterrogationIntro:
+                case GamePhase.QuestionSelection:
+                case GamePhase.QuestionPlayback:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // 詳細はPhaseを変えない。背後のクリック可否だけを更新する。
+        public void RefreshInteraction()
+        {
+            if (exploration != null) exploration.RefreshHotspots();
+            if (interrogation != null) interrogation.RefreshQuestionOptions();
+        }
+
+        public void ConfigureInterrogation(InterrogationController controller, GameObject badEnd, GameObject trueEnd)
+        {
+            interrogation = controller;
+            badEndingPanel = badEnd;
+            trueEndingPanel = trueEnd;
+        }
+
+        public void ConfigureAcquisition(InventoryPanel slots, GameObject interrogationPreview)
+        {
+            inventory = slots;
+            questionPanel = interrogationPreview;
+        }
+
+        public void ConfigureInspection(ContentCatalog content, GameObject popup, GameObject introductionNote)
+        {
+            catalog = content;
+            inspectionPanel = popup;
+            introNote = introductionNote;
+        }
+
+        public void ConfigureExploration(ExplorationController controller, GameObject closeup)
+        {
+            exploration = controller;
+            closeupPanel = closeup;
+        }
+
+        public void Configure(ScenarioRepository source, TextAsset json, DialoguePlayer player,
+            UiInputRouter router, GameObject title, GameObject conversation, GameObject room)
+        {
+            repository = source;
+            scenario = json;
+            dialogue = player;
+            input = router;
+            titlePanel = title;
+            dialoguePanel = conversation;
+            roomPanel = room;
+        }
+
+        private void Start()
+        {
+            ready = repository != null && scenario != null && dialogue != null && input != null
+                && titlePanel != null && dialoguePanel != null && roomPanel != null;
+            if (!ready)
+            {
+                Debug.LogError("[SeaOfMemories] Scene references are missing. Run the starter setup.", this);
+                enabled = false;
+                return;
+            }
+            ready = repository.Load(scenario) && repository.Find("INTRO_START") != null;
+            if (ready && catalog != null && (inspectionPanel == null || exploration == null
+                || !exploration.HasInspectionUI || !catalog.Validate()))
+            {
+                Debug.LogError("[SeaOfMemories] Item inspection references or catalog data are incomplete.", this);
+                ready = false;
+            }
+            if (ready && exploration != null && (closeupPanel == null || !exploration.IsConfigured))
+            {
+                Debug.LogError("[SeaOfMemories] Exploration references are incomplete. Check GameSystems and CloseupPanel.", this);
+                ready = false;
+            }
+            if (ready && repository.HasChoices && !dialogue.HasChoiceUI)
+            {
+                Debug.LogError("[SeaOfMemories] Choice UI is missing. Stop Play mode, run Sea of Memories > 02 - Add Intro Choices, save MainScene, then play again.", this);
+                ready = false;
+            }
+            if (ready && inventory != null)
+            {
+                if (!inventory.IsConfigured || questionPanel == null || exploration == null || !exploration.HasAcquisitionUI)
+                {
+                    Debug.LogError("[SeaOfMemories] Acquisition UI references are incomplete.", this);
+                    ready = false;
+                }
+                string[] required = { "PICKUP_REACTION_1", "PICKUP_REACTION_2", "PICKUP_REACTION_3", "PICKUP_REACTION_4",
+                    "FURNITURE_EMPTY", "GUARD_RETURN", "INTERROGATION_INTRO" };
+                foreach (string id in required) if (repository.Find(id) == null) ready = false;
+                if (inventory.HasDetailsSetup && !inventory.IsDetailsConfigured)
+                {
+                    Debug.LogError("[SeaOfMemories] Inventory reread references are incomplete. Check step 06.", this);
+                    ready = false;
+                }
+            }
+            if (ready && interrogation != null && (!interrogation.IsConfigured || badEndingPanel == null
+                || trueEndingPanel == null || catalog == null || !catalog.ValidateInterrogation()))
+            {
+                Debug.LogError("[SeaOfMemories] Interrogation references or data are incomplete. Check step 07.", this);
+                ready = false;
+            }
+            if (ready && interrogation != null && interrogation.HasVisualSetup
+                && (!interrogation.HasQuestionVisuals || !dialogue.HasPortraitUI || !catalog.ValidatePortraits()))
+            {
+                Debug.LogError("[SeaOfMemories] Question visual references or portrait IDs are incomplete. Check step 10.", this);
+                ready = false;
+            }
+            if (ready && repository.HasExpressions && (!dialogue.HasPortraitUI || catalog == null || !catalog.ValidatePortraits()))
+            {
+                Debug.LogError("[SeaOfMemories] Scenario expressions need the portrait setup and sprite catalog.", this);
+                ready = false;
+            }
+            if (ready && (audioController != null || repository.HasAudioCommands)
+                && (audioController == null || !audioController.IsConfigured || !dialogue.HasAudioUI
+                    || catalog == null || !catalog.ValidateAudio()))
+            {
+                Debug.LogError("[SeaOfMemories] Audio references or IDs are incomplete. Check step 11.", this);
+                ready = false;
+            }
+            if (ready && backgroundView != null && (!backgroundView.IsConfigured || catalog == null || !catalog.ValidateBackgrounds()))
+            {
+                Debug.LogError("[SeaOfMemories] Background references or sprite IDs are incomplete. Check step 12.", this);
+                ready = false;
+            }
+            if (effects != null)
+            {
+                if (!effects.IsConfigured)
+                {
+                    Debug.LogError("[SeaOfMemories] Fade references are incomplete. Check step 08.", this);
+                    ready = false;
+                }
+                effects.Covered += OnFadeCovered;
+                effects.Completed += OnFadeCompleted;
+                effects.Cancelled += OnFadeCancelled;
+                effectsSubscribed = true;
+            }
+            if (ready && repository.HasBackgroundCommands && (backgroundView == null || !backgroundView.IsConfigured
+                || catalog == null || !catalog.ValidateBackgrounds()))
+            {
+                Debug.LogError("[SeaOfMemories] Scenario backgrounds need the background view and catalog.", this);
+                ready = false;
+            }
+            dialogue.ConfigureScenarioFades(this);
+            EnterTitle();
+        }
+
+        public void EnterTitle()
+        {
+            ClearTransition();
+            if (effects != null) effects.CancelFade();
+            if (inventory != null) inventory.DismissDetails();
+            input.SuppressForCurrentFrame();
+            dialogue.StopPlayback();
+            session.Reset();
+            if (exploration != null) exploration.ResetView();
+            if (interrogation != null) interrogation.ResetView();
+            if (ready && backgroundView != null) backgroundView.SetBackground("BG_TITLE");
+            SetPhase(GamePhase.Title);
+            if (ready && audioController != null)
+            {
+                audioController.StopAll();
+                audioController.PlayBgm("BGM_01");
+            }
+        }
+
+        public void StartNewGame()
+        {
+            if (!ready || session.Phase != GamePhase.Title) return;
+            input.SuppressForCurrentFrame();
+            dialogue.StopPlayback();
+            session.Reset();
+            if (exploration != null) exploration.ResetView();
+            if (interrogation != null) interrogation.ResetView();
+            if (audioController != null)
+            {
+                audioController.PlaySe("SE_01");
+                audioController.PlayBgm("BGM_01");
+            }
+            if (backgroundView != null)
+                TransitionTo(GamePhase.Intro, "BG_01", null, () => dialogue.Play("INTRO_START", StartExploration));
+            else
+            {
+                // メニュー12未適用の既存シーンはこれまでの即時表示を維持する。
+                SetPhase(GamePhase.Intro);
+                dialogue.Play("INTRO_START", StartExploration);
+            }
+        }
+
+        public void StartExploration()
+        {
+            TransitionTo(GamePhase.Room, "BG_02", () => session.CurrentFurnitureId = "");
+        }
+
+        public bool CanInteractWithWorld()
+        {
+            return ready && !IsTransitioning && !IsItemDetailsOpen
+                && (session.Phase == GamePhase.Room || session.Phase == GamePhase.Closeup);
+        }
+
+        public bool TryEnterCloseup(string furnitureId)
+        {
+            if (!CanInteractWithWorld() || session.Phase != GamePhase.Room
+                || exploration == null || closeupPanel == null || string.IsNullOrWhiteSpace(furnitureId)) return false;
+            string backgroundId = exploration.GetFurnitureBackgroundId(furnitureId);
+            if (string.IsNullOrWhiteSpace(backgroundId)) return false;
+            return TransitionTo(GamePhase.Closeup, backgroundId, () =>
+            {
+                session.CurrentFurnitureId = furnitureId;
+                exploration.ShowFurniture(furnitureId);
+            });
+        }
+
+        public bool TryStartInspection()
+        {
+            if (!CanInteractWithWorld() || session.Phase != GamePhase.Closeup
+                || catalog == null || inspectionPanel == null || exploration == null || !exploration.HasInspectionUI) return false;
+            input.SuppressForCurrentFrame();
+            SetPhase(GamePhase.Inspecting);
+            return true;
+        }
+
+        public void FinishInspection()
+        {
+            if (session.Phase != GamePhase.Inspecting) return;
+            input.SuppressForCurrentFrame();
+            SetPhase(GamePhase.Closeup);
+        }
+
+        public void BeginItemChoice()
+        {
+            if (session.Phase != GamePhase.Inspecting) return;
+            input.SuppressForCurrentFrame();
+            SetPhase(GamePhase.ItemChoice);
+        }
+
+        public void FinishItemChoice()
+        {
+            if (session.Phase != GamePhase.ItemChoice) return;
+            input.SuppressForCurrentFrame();
+            SetPhase(GamePhase.Closeup);
+        }
+
+        public bool TryAcquireItem(string itemId)
+        {
+            if (!ready || IsItemDetailsOpen || session.Phase != GamePhase.ItemChoice || catalog == null || inventory == null) return false;
+            ItemDefinition item = catalog.GetItem(itemId);
+            if (item == null || item.FurnitureId != session.CurrentFurnitureId || !session.TryAddItem(itemId)) return false;
+            inventory.Refresh(session);
+            exploration.RefreshHotspots();
+            return true;
+        }
+
+        public void PlayAcquisitionReaction()
+        {
+            if (session.Phase != GamePhase.ItemChoice || session.ItemIds.Count == 0) return;
+            input.SuppressForCurrentFrame();
+            SetPhase(GamePhase.PickupReaction);
+            dialogue.Play("PICKUP_REACTION_" + session.ItemIds.Count, OnAcquisitionFinished);
+        }
+
+        public void OnAcquisitionFinished()
+        {
+            if (session.Phase != GamePhase.PickupReaction) return;
+            // 4個目は家具完了より必ず優先。専用反応の再生完了後にだけ帰還へ進む。
+            if (session.IsInventoryFull()) { StartGuardReturn(); return; }
+            exploration.FinishAcquisitionSequence(session.CurrentFurnitureId);
+        }
+
+        public void PlayFurnitureEmpty()
+        {
+            if (session.Phase != GamePhase.PickupReaction) return;
+            if (session.IsInventoryFull()) { StartGuardReturn(); return; }
+            input.SuppressForCurrentFrame();
+            dialogue.Play("FURNITURE_EMPTY", StartExploration);
+        }
+
+        public void ResumeCloseupAfterPickup()
+        {
+            if (session.Phase != GamePhase.PickupReaction) return;
+            input.SuppressForCurrentFrame();
+            SetPhase(GamePhase.Closeup);
+        }
+
+        public void StartGuardReturn()
+        {
+            if (session.Phase != GamePhase.PickupReaction || !session.IsInventoryFull()) return;
+            TransitionTo(GamePhase.GuardReturn, "BG_02", () => session.CurrentFurnitureId = "",
+                () => dialogue.Play("GUARD_RETURN", StartInterrogation));
+        }
+
+        public void StartInterrogation()
+        {
+            if (session.Phase != GamePhase.GuardReturn) return;
+            TransitionTo(GamePhase.InterrogationIntro, "BG_01", null,
+                () => dialogue.Play("INTERROGATION_INTRO", EnterQuestionSelection));
+        }
+
+        public void EnterQuestionSelection()
+        {
+            if (IsItemDetailsOpen || session.QuestionCount >= 3
+                || (session.Phase != GamePhase.InterrogationIntro && session.Phase != GamePhase.QuestionPlayback)) return;
+            input.SuppressForCurrentFrame();
+            SetPhase(GamePhase.QuestionSelection);
+            if (interrogation != null) interrogation.BeginQuestionPhase();
+        }
+
+        public bool TryStartQuestionPlayback()
+        {
+            if (!ready || IsItemDetailsOpen || interrogation == null || session.Phase != GamePhase.QuestionSelection
+                || session.QuestionCount >= 3) return false;
+            input.SuppressForCurrentFrame();
+            SetPhase(GamePhase.QuestionPlayback);
+            return true;
+        }
+
+        public bool TryDismissQuestionWarning()
+        {
+            return !IsItemDetailsOpen && interrogation != null && session.Phase == GamePhase.QuestionSelection
+                && interrogation.TryDismissWarning();
+        }
+
+        public void RefreshQuestionState()
+        {
+            if (inventory != null)
+            {
+                inventory.Refresh(session);
+                // 最後の看守返答を再生するより前に灰色・操作不可にする。
+                inventory.SetEnabled(session.QuestionCount < 3);
+            }
+            RefreshInteraction();
+        }
+
+        public void StartEnding(EndingType ending)
+        {
+            if (session.Phase != GamePhase.QuestionPlayback || session.QuestionCount != 3 || IsItemDetailsOpen) return;
+            EndingType expected = session.Agitation == 100 ? EndingType.True : EndingType.Bad;
+            if (ending != expected)
+            {
+                Debug.LogError("[SeaOfMemories] Ending does not match the accepted question results.", this);
+                return;
+            }
+            bool white = ending == EndingType.True;
+            string sequenceId = white ? "TRUE_END" : "BAD_END";
+            TransitionTo(white ? GamePhase.TrueEnding : GamePhase.BadEnding, sequenceId, null,
+                () => dialogue.Play(sequenceId, EnterTitle), true);
+        }
+
+        public bool CanAdvanceDialogue()
+        {
+            return !IsTransitioning && !IsItemDetailsOpen && SupportsDialogue(session.Phase);
+        }
+
+        private static bool SupportsDialogue(GamePhase phase)
+        {
+            return phase == GamePhase.Intro || phase == GamePhase.Inspecting || phase == GamePhase.PickupReaction
+                || phase == GamePhase.GuardReturn || phase == GamePhase.InterrogationIntro
+                || phase == GamePhase.QuestionPlayback || phase == GamePhase.BadEnding || phase == GamePhase.TrueEnding;
+        }
+
+        public bool TryPlayScenarioFade(bool white, Action completed)
+        {
+            if (!ready || IsTransitioning || IsItemDetailsOpen || backgroundView == null
+                || effects == null || !effects.IsConfigured || !effects.isActiveAndEnabled
+                || string.IsNullOrEmpty(backgroundView.CurrentBackgroundId)) return false;
+            return TryPlayScenarioBackground("", white, completed);
+        }
+
+        public bool TryPlayScenarioBackground(string id, bool white, Action completed)
+        {
+            if (!ready || IsTransitioning || IsItemDetailsOpen || backgroundView == null || !backgroundView.IsConfigured
+                || catalog == null || effects == null || !effects.IsConfigured || !effects.isActiveAndEnabled) return false;
+            string target = string.IsNullOrEmpty(id) ? backgroundView.CurrentBackgroundId : id;
+            if (!ContentCatalog.IsBackgroundId(target) || !catalog.HasSpriteId(target)) return false;
+            return TransitionTo(session.Phase, target, null, completed, false, white);
+        }
+
+        private bool TransitionTo(GamePhase destination, string targetId, Action covered, Action completed = null, bool ending = false, bool whiteFade = false)
+        {
+            if (IsTransitioning || IsItemDetailsOpen) return false;
+            string backgroundId = ending ? (destination == GamePhase.TrueEnding ? "BG_07" : "BG_06") : targetId;
+            input.SuppressForCurrentFrame();
+            if (effects == null || !effects.IsConfigured || !effects.isActiveAndEnabled)
+            {
+                // メニュー08未適用なら、前工程と同じ即時切替を維持する。
+                covered?.Invoke();
+                if (backgroundView != null) backgroundView.SetBackground(backgroundId);
+                SetPhase(destination);
+                completed?.Invoke();
+                return true;
+            }
+            transitionTarget = targetId;
+            transitionCovered = false;
+            transitionCoveredAction = () =>
+            {
+                covered?.Invoke();
+                if (backgroundView != null) backgroundView.SetBackground(backgroundId);
+                ShowPanels(destination);
+                // 新しい会話はフェード後に始める。直前の台詞を新画面へ持ち越さない。
+                if (completed != null) dialoguePanel.SetActive(false);
+            };
+            transitionFinishedAction = () =>
+            {
+                SetPhase(destination);
+                dialogue.Resume();
+                completed?.Invoke();
+            };
+            dialogue.Pause();
+            // Transition中は元の表示を保持し、暗幕が覆ってからだけ差し替える。
+            SetPhase(GamePhase.Transition);
+            if (ending) effects.PlayEndingFade(destination == GamePhase.TrueEnding, effects.EndingFadeSeconds);
+            else if (whiteFade) effects.FadeScenario(targetId, true, effects.BackgroundFadeSeconds);
+            else effects.FadeBackground(targetId, effects.BackgroundFadeSeconds);
+            return true;
+        }
+
+        private void OnFadeCovered(string targetId)
+        {
+            if (session.Phase != GamePhase.Transition || transitionFinishedAction == null
+                || targetId != transitionTarget || transitionCovered) return;
+            transitionCovered = true;
+            transitionCoveredAction?.Invoke();
+        }
+
+        private void OnFadeCompleted()
+        {
+            if (session.Phase != GamePhase.Transition || transitionFinishedAction == null) return;
+            // 中断時は切替処理を一度だけ補い、入力ロックを残さない。
+            if (!transitionCovered) OnFadeCovered(transitionTarget);
+            Action completed = transitionFinishedAction;
+            ClearTransition();
+            input.SuppressForCurrentFrame();
+            completed?.Invoke();
+        }
+
+        private void ClearTransition()
+        {
+            transitionTarget = null;
+            transitionCoveredAction = null;
+            transitionFinishedAction = null;
+            transitionCovered = false;
+        }
+
+        private void OnFadeCancelled()
+        {
+            if (isActiveAndEnabled && Application.isPlaying) OnFadeCompleted();
+        }
+
+        private void OnEnable()
+        {
+            if (transitionFinishedAction != null && (effects == null || !effects.IsBusy)) OnFadeCompleted();
+        }
+
+        private void OnDestroy()
+        {
+            if (effects == null || !effectsSubscribed) return;
+            effects.Covered -= OnFadeCovered;
+            effects.Completed -= OnFadeCompleted;
+            effects.Cancelled -= OnFadeCancelled;
+            ClearTransition();
+            effects.CancelFade();
+        }
+
+        private void SetPhase(GamePhase phase)
+        {
+            session.Phase = phase;
+            if (phase != GamePhase.Transition) ShowPanels(phase);
+            RefreshInteraction();
+            Debug.Log("[SeaOfMemories] Phase = " + phase, this);
+        }
+
+        // 表示だけを差し替える。Phaseはフェード完了までTransitionのままにする。
+        private void ShowPanels(GamePhase phase)
+        {
+            titlePanel.SetActive(phase == GamePhase.Title);
+            dialoguePanel.SetActive(SupportsDialogue(phase) || phase == GamePhase.ItemChoice
+                || (phase == GamePhase.QuestionSelection && interrogation != null));
+            roomPanel.SetActive(phase == GamePhase.Room || phase == GamePhase.GuardReturn);
+            if (closeupPanel != null) closeupPanel.SetActive(phase == GamePhase.Closeup || phase == GamePhase.Inspecting
+                || phase == GamePhase.ItemChoice || phase == GamePhase.PickupReaction);
+            if (inspectionPanel != null) inspectionPanel.SetActive(phase == GamePhase.Inspecting || phase == GamePhase.ItemChoice);
+            if (questionPanel != null) questionPanel.SetActive(phase == GamePhase.InterrogationIntro
+                || phase == GamePhase.QuestionSelection || phase == GamePhase.QuestionPlayback);
+            if (badEndingPanel != null) badEndingPanel.SetActive(phase == GamePhase.BadEnding);
+            if (trueEndingPanel != null) trueEndingPanel.SetActive(phase == GamePhase.TrueEnding);
+            if (introNote != null) introNote.SetActive(phase == GamePhase.Intro);
+            // ポップアップの暗幕が台詞欄を塞がないよう、台詞欄を手前へ置く。
+            if (dialoguePanel.activeSelf) dialoguePanel.transform.SetAsLastSibling();
+            if (inventory != null)
+            {
+                inventory.Refresh(session);
+                inventory.SetEnabled(session.QuestionCount < 3 && phase != GamePhase.BadEnding && phase != GamePhase.TrueEnding);
+                inventory.gameObject.SetActive(phase != GamePhase.Title && phase != GamePhase.BadEnding && phase != GamePhase.TrueEnding);
+            }
+        }
+    }
+}

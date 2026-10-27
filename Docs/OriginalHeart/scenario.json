@@ -1,0 +1,78 @@
+
+{
+  "sequences": [
+    {
+      "id": "INTRO_START",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "……目が覚めたか。",
+          "expressionId": "CH_01_normal",
+          "backgroundId": "BG_01"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "ここはどこだ？",
+              "nextSequenceId": "INTRO_TONE_A"
+            },
+            {
+              "id": "b",
+              "label": "ここはどこですか？",
+              "nextSequenceId": "INTRO_TONE_B"
+            }
+          ]
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "INTRO_TONE_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "ここはどこだ？"
+        }
+      ],
+      "nextSequenceId": "INTRO_COMMON"
+    },
+    {
+      "id": "INTRO_TONE_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "ここはどこなんですか？"
+        }
+      ],
+      "nextSequenceId": "INTRO_COMMON"
+    },
+    {
+      "id": "INTRO_COMMON",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "少しの間、ここで待っていろ。",
+          "expressionId": "CH_01_normal"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "ITEM_01_INSPECT",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "長さの違う鉛筆が二本並んでいる。"
+        }
+      ],
+      "nextSequenceId": ""
+    }
+  ]
+}

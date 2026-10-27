@@ -1,4 +1,3 @@
-
 {
   "sequences": [
     {
@@ -70,6 +69,389 @@
           "type": "line",
           "speaker": "narration",
           "text": "長さの違う鉛筆が二本並んでいる。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "DESC_ITEM_01",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 1/2] Uneven pencils."
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 2/2] Description pending."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "DESC_ITEM_02",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 1/2] Scribbles."
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 2/2] Description pending."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "DESC_ITEM_03",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 1/2] Small clothes."
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 2/2] Description pending."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "DESC_ITEM_04",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 1/2] Alarm clock at 2 AM."
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 2/2] Description pending."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "DESC_ITEM_05",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 1/2] Certificate with brother's name."
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 2/2] Description pending."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "DESC_ITEM_06",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 1/2] Endless sea."
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER 2/2] Description pending."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "PICKUP_REACTION_1",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER PICKUP 1/4] ..."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "PICKUP_REACTION_2",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER PICKUP 2/4] ..."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "PICKUP_REACTION_3",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER PICKUP 3/4] ..."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "PICKUP_REACTION_4",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER PICKUP 4/4] ..."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "FURNITURE_EMPTY",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER FURNITURE EMPTY] There seems to be nothing else here."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "GUARD_RETURN",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER GUARD RETURN 1/2] ..."
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER GUARD RETURN 2/2] ..."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "INTERROGATION_INTRO",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER INTERROGATION INTRO 1/2] ..."
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER INTERROGATION INTRO 2/2] ..."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_01",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_01] What can you tell me about the uneven pencils?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_01",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_01] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_02",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_02] What can you tell me about the scribbled notes?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_02",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_02] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_03",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_03] What can you tell me about the small clothes?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_03",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_03] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_04",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_04] What can you tell me about the 2 AM alarm?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_04",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_04] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_05",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_05] What can you tell me about the certificate?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_05",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_05] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_06",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_06] What can you tell me about the endless sea?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_06",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_06] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_PROMPT",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER THOUGHT] Which information should I ask about?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_MISSING_INFO",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "必要な情報を持っていない"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_VALID_REACTION",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "ッ！"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "BAD_END",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER BAD END] The three questions did not uncover the truth.",
+          "seId": "SE_07"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER] The final text ends here. Advance to return to the title.",
+          "seId": "SE_08"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "TRUE_END",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER TRUE END] The three valid questions uncovered the truth.",
+          "seId": "SE_09"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER] The final text ends here. Advance to return to the title."
         }
       ],
       "nextSequenceId": ""
