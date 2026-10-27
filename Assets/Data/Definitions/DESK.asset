@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7563c45717dc4f11b298a56eedebb0c9, type: 3}
+  m_Name: DESK
+  m_EditorClassIdentifier: Assembly-CSharp::SeaOfMemories.FurnitureDefinition
+  id: DESK
+  backgroundId: BG_03
+  itemIds:
+  - ITEM_01
+  - ITEM_02
+  placeholderColor: {r: 0.18, g: 0.13, b: 0.09, a: 1}

@@ -1,0 +1,12 @@
+Noto Sans CJK JP Regular
+
+Copyright holder: Adobe. The original font's embedded copyright and reserved-name metadata are retained in the unmodified source font.
+Project: Noto fonts (Google / Adobe)
+License: SIL Open Font License 1.1; see NotoSansCJKjp-OFL.txt in this directory.
+
+Upstream: https://github.com/notofonts/noto-cjk
+Pinned source commit: f8d157532fbfaeda587e826d4cd5b21a49186f7c
+Font source: Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf
+Git blob SHA-1: f56224957fb13a81b4c14bac34f2f058a017f9fb
+
+The source font is downloaded unmodified by the Unity Editor setup. The project generates a TextMeshPro SDF atlas from it for game display. This notice and the original license are included in StreamingAssets for distribution with the game.

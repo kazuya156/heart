@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9912cf2ab24141d88511388aaa4eed5c, type: 3}
+  m_Name: ITEM_01
+  m_EditorClassIdentifier: Assembly-CSharp::SeaOfMemories.ItemDefinition
+  id: ITEM_01
+  displayName: Uneven pencils
+  isValid: 1
+  furnitureId: DESK
+  icon: {fileID: 0}
+  largeImage: {fileID: 0}
+  descriptionSequenceId: ITEM_01_INSPECT
+  questionSequenceId: QUESTION_ITEM_01
+  replySequenceId: REPLY_ITEM_01
+  questionLabel: '[PLACEHOLDER] Ask about Uneven pencils'
+  useCustomHotspot: 0
+  hotspotRect:
+    serializedVersion: 2
+    x: 0.1
+    y: 0.2
+    width: 0.3
+    height: 0.4
