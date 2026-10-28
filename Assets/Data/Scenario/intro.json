@@ -1,0 +1,172 @@
+{
+  "sequences": [
+    {
+      "id": "INTRO_START",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "遠くで波の音が聞こえる。",
+          "backgroundId": "BG_03"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "...海の近くには住んでいないはずなのに。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "誰かが近づいてくる...？",
+          "seId": "SE_02"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "目が覚めたようだな。",
+          "expressionId": "GUARD_01"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "声のする方を向くと、重々しい鉄柵の向こうに人影が見えた。",
+          "backgroundId": "BG_04"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "あんた、誰だよ。",
+              "nextSequenceId": "INTRO_REPLY_1_A"
+            },
+            {
+              "id": "b",
+              "label": "...どちら様ですか。",
+              "nextSequenceId": "INTRO_REPLY_1_B"
+            }
+          ]
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "INTRO_REPLY_1_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "あんた、誰だよ。"
+        }
+      ],
+      "nextSequenceId": "INTRO_AFTER_REPLY_1"
+    },
+    {
+      "id": "INTRO_REPLY_1_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "...どちら様ですか。"
+        }
+      ],
+      "nextSequenceId": "INTRO_AFTER_REPLY_1"
+    },
+    {
+      "id": "INTRO_AFTER_REPLY_1",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "男は冷ややかな目で｛主人公｝を見ている。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "お前が知る必要はない。",
+          "expressionId": "GUARD_02"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "この牢で大人しくしていればいい。"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "牢...？どういう意味だ。",
+              "nextSequenceId": "INTRO_REPLY_2_A"
+            },
+            {
+              "id": "b",
+              "label": "何が言いたいんですか。",
+              "nextSequenceId": "INTRO_REPLY_2_B"
+            }
+          ]
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "INTRO_REPLY_2_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "牢...？どういう意味だ。"
+        }
+      ],
+      "nextSequenceId": "INTRO_END"
+    },
+    {
+      "id": "INTRO_REPLY_2_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "何が言いたいんですか。"
+        }
+      ],
+      "nextSequenceId": "INTRO_END"
+    },
+    {
+      "id": "INTRO_END",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "｛主人公｝の言葉を意に介することなく、男はどこかを見つめている。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "チッ、邪魔が入ったか...。おい、お前！",
+          "expressionId": "GUARD_03"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "妙な真似はするなよ。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "男はそう告げると、焦った様子で奥の方へと消えていった。"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "ここから出ないと...。"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "手がかりを探そう。"
+        }
+      ],
+      "nextSequenceId": ""
+    }
+  ]
+}

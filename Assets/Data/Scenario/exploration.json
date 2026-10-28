@@ -1,0 +1,204 @@
+{
+  "sequences": [
+    {
+      "id": "EXPLORATION_START",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "部屋全体の見た目は見覚えがあるような、無いような、不思議な感覚を覚える。",
+          "backgroundId": "BG_03"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "FURNITURE_DESK_OPEN",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "子供用の学習机だろうか？一方は使われていなさそうだが...。",
+          "backgroundId": "BG_05"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "ITEM_01_INSPECT",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "いたって普通な鉛筆のようだが、長さが違う。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "片方だけ使い続けたのだろうか。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "ITEM_02_INSPECT",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "ヒーローものの落書きのようだ。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "二つの机にまたがって描かれている。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "FURNITURE_BED_OPEN",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "子供用の二段ベッドのようだ。なぜこんなところに...？",
+          "backgroundId": "BG_06"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "ITEM_03_INSPECT",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "子供が使いそうな道具が散らばっている。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "整理されているとは言えそうにない。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "ITEM_04_INSPECT",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "午前二時を指し示す目覚まし時計だ。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "今は止まってしまっている。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "FURNITURE_WINDOW_OPEN",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "この部屋唯一の窓だ。外には海が見える。",
+          "backgroundId": "BG_07"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "ITEM_05_INSPECT",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "はるか遠くまで水平線が続いている。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "ここはいったいどこなのだろうか。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "ITEM_06_INSPECT",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "誰かの表彰状のようだ。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "詳細は分からないが、習字コンクールで受賞した誰かがいたのだろうか。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "FURNITURE_EMPTY",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "これ以上の手がかりはなさそうだ。他を探そう。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "PICKUP_REACTION_1",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "まだ何か見つかるはずだ。次を探そう。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "PICKUP_REACTION_2",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "男が戻ってくる前に、次を探そう。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "PICKUP_REACTION_3",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "もう時間がない。急いで探そう。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "GUARD_RETURN",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "男が戻ってくる音がする。扉の前に戻ろう。",
+          "seId": "SE_02"
+        }
+      ],
+      "nextSequenceId": ""
+    }
+  ]
+}
