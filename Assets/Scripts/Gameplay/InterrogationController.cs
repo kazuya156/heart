@@ -24,6 +24,7 @@ namespace SeaOfMemories
         [SerializeField] private GuardPortraitView portrait;
         [SerializeField] private AudioController audioController;
         public void ConfigureAudio(AudioController controller) { audioController = controller; }
+        private bool statusPanelReady;
         private bool warning;
         private float warningSecondsRemaining = -1f;
         private const float WarningDuration = 1.5f;
@@ -96,12 +97,13 @@ namespace SeaOfMemories
         public void RefreshQuestionOptions()
         {
             if (!IsConfigured) return;
+            EnsureStatusPanel();
             GameSession session = flow.Session;
             questionCount.text = "質問 " + session.QuestionCount + "/3";
             comboCount.text = "コンボ " + session.ComboCount;
             agitation.text = "動揺度 " + session.Agitation + "/100";
             gaugeFill.anchorMax = new Vector2(Mathf.Clamp01(session.Agitation / 100f), 1f);
-            optionsRoot.SetActive(session.QuestionCount < 3);
+            optionsRoot.SetActive(flow.Phase == GamePhase.QuestionSelection && session.QuestionCount < 3);
             bool canSelect = flow.Phase == GamePhase.QuestionSelection && !flow.IsModalOpen && !warning && !presentingImmediateLine
                 && session.QuestionCount < 3;
             for (int i = 0; i < buttons.Length; i++)
@@ -110,6 +112,9 @@ namespace SeaOfMemories
                 ItemDefinition item = catalog.GetItem(id);
                 bool owned = session.HasItem(id);
                 bool asked = session.HasAsked(id);
+                RectTransform optionRect = buttons[i].GetComponent<RectTransform>();
+                optionRect.anchorMin = new Vector2(0.64f, optionRect.anchorMin.y);
+                optionRect.anchorMax = new Vector2(0.99f, optionRect.anchorMax.y);
                 labels[i].text = !owned ? "？？？" : item == null ? id : item.QuestionLabel;
                 labels[i].color = asked ? new Color(0.5f, 0.5f, 0.5f) : Color.white;
                 icons[i].sprite = owned && item != null ? item.Icon : null;
@@ -118,6 +123,61 @@ namespace SeaOfMemories
                 markers[i].text = !owned ? "LOCK" : asked ? "質問済み" : id;
                 buttons[i].interactable = canSelect && item != null && !asked;
             }
+        }
+
+        private void EnsureStatusPanel()
+        {
+            if (statusPanelReady || optionsRoot == null || optionsRoot.transform.parent == null) return;
+            Transform parent = optionsRoot.transform.parent;
+            var panel = new GameObject("QuestionStatusBacking", typeof(RectTransform), typeof(Image));
+            RectTransform rect = panel.GetComponent<RectTransform>();
+            rect.SetParent(parent, false);
+            rect.anchorMin = new Vector2(0.025f, 0.68f);
+            rect.anchorMax = new Vector2(0.39f, 0.998f);
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            rect.SetAsFirstSibling();
+            Image image = panel.GetComponent<Image>();
+            image.color = new Color(0.015f, 0.055f, 0.07f, 0.94f);
+            image.raycastTarget = false;
+            Transform heading = parent.Find("Title");
+            if (heading != null)
+            {
+                var title = heading.GetComponent<TMP_Text>();
+                if (title != null)
+                {
+                    title.color = new Color(0.60f, 0.91f, 0.94f);
+                    title.fontSize = 28f;
+                    title.alignment = TextAlignmentOptions.MidlineLeft;
+                    title.raycastTarget = false;
+                    title.rectTransform.anchorMin = new Vector2(0.05f, 0.94f);
+                    title.rectTransform.anchorMax = new Vector2(0.37f, 0.995f);
+                    title.rectTransform.offsetMin = title.rectTransform.offsetMax = Vector2.zero;
+                }
+            }
+            foreach (TMP_Text label in new[] { questionCount, agitation, comboCount })
+            {
+                label.color = Color.white;
+                label.alignment = TextAlignmentOptions.MidlineLeft;
+                label.fontSize = 28f;
+                label.raycastTarget = false;
+                RectTransform textRect = label.rectTransform;
+                textRect.anchorMin = new Vector2(0.05f, textRect.anchorMin.y);
+                textRect.anchorMax = new Vector2(0.37f, textRect.anchorMax.y);
+                textRect.offsetMin = textRect.offsetMax = Vector2.zero;
+            }
+            if (gaugeFill != null && gaugeFill.parent != null)
+            {
+                var trackRect = gaugeFill.parent as RectTransform;
+                if (trackRect != null)
+                {
+                    trackRect.anchorMin = new Vector2(0.05f, 0.775f);
+                    trackRect.anchorMax = new Vector2(0.37f, 0.795f);
+                    trackRect.offsetMin = trackRect.offsetMax = Vector2.zero;
+                }
+                Image track = gaugeFill.parent.GetComponent<Image>();
+                if (track != null) { track.color = new Color(0.14f, 0.30f, 0.34f, 1f); track.raycastTarget = false; }
+            }
+            statusPanelReady = true;
         }
 
         public void SelectSlot(int index)

@@ -210,6 +210,8 @@ namespace SeaOfMemories
                 Debug.LogError("[SeaOfMemories] Scenario backgrounds need the background view and catalog.", this);
                 ready = false;
             }
+            ConfigureEndingHeading(badEndingPanel, "BAD END");
+            ConfigureEndingHeading(trueEndingPanel, "TRUE END");
             dialogue.ConfigureScenarioFades(this);
             Canvas canvas = titlePanel.GetComponentInParent<Canvas>();
             if (canvas != null)
@@ -611,6 +613,32 @@ namespace SeaOfMemories
             Debug.Log("[SeaOfMemories] Phase = " + phase, this);
         }
 
+        private static void ConfigureEndingHeading(GameObject panel, string title)
+        {
+            if (panel == null) return;
+            Transform child = panel.transform.Find("EndingTitle");
+            if (child == null) return;
+            var label = child.GetComponent<TMPro.TMP_Text>();
+            if (label == null) return;
+            label.text = title;
+            label.color = Color.white;
+            label.raycastTarget = false;
+            label.alignment = TMPro.TextAlignmentOptions.Center;
+            RectTransform rect = label.rectTransform;
+            rect.anchorMin = new Vector2(0.30f, 0.57f);
+            rect.anchorMax = new Vector2(0.70f, 0.73f);
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            var backing = new GameObject("EndingHeadingBacking", typeof(RectTransform), typeof(UnityEngine.UI.Image));
+            RectTransform plate = backing.GetComponent<RectTransform>();
+            plate.SetParent(panel.transform, false);
+            plate.anchorMin = rect.anchorMin; plate.anchorMax = rect.anchorMax;
+            plate.offsetMin = new Vector2(-16f, -8f); plate.offsetMax = new Vector2(16f, 8f);
+            var image = backing.GetComponent<UnityEngine.UI.Image>();
+            image.color = new Color(0.01f, 0.04f, 0.055f, 0.85f);
+            image.raycastTarget = false;
+            plate.SetSiblingIndex(child.GetSiblingIndex());
+        }
+
         // 表示だけを差し替える。Phaseはフェード完了までTransitionのままにする。
         private void ShowPanels(GamePhase phase)
         {
@@ -627,8 +655,8 @@ namespace SeaOfMemories
             if (inspectionPanel != null) inspectionPanel.SetActive(phase == GamePhase.Inspecting || phase == GamePhase.ItemChoice);
             if (questionPanel != null) questionPanel.SetActive(phase == GamePhase.InterrogationIntro
                 || phase == GamePhase.QuestionSelection || phase == GamePhase.QuestionPlayback);
-            if (badEndingPanel != null) badEndingPanel.SetActive(phase == GamePhase.BadEnding);
-            if (trueEndingPanel != null) trueEndingPanel.SetActive(phase == GamePhase.TrueEnding);
+            if (badEndingPanel != null) badEndingPanel.SetActive(phase == GamePhase.BadEnding && backgroundView != null && backgroundView.CurrentBackgroundId == "BG_09");
+            if (trueEndingPanel != null) trueEndingPanel.SetActive(phase == GamePhase.TrueEnding && backgroundView != null && backgroundView.CurrentBackgroundId == "BG_08");
             if (introNote != null) introNote.SetActive(false);
             // ポップアップの暗幕が台詞欄を塞がないよう、台詞欄を手前へ置く。
             if (dialoguePanel.activeSelf) dialoguePanel.transform.SetAsLastSibling();

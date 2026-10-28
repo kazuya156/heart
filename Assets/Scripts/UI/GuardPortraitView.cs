@@ -12,61 +12,45 @@ namespace SeaOfMemories
         [SerializeField] private TMP_Text placeholder;
         [SerializeField, Min(0f)] private float shakeSeconds = 0.18f;
         [SerializeField, Min(0f)] private float shakePixels = 8f;
-        private Transform originalParent;
-        private int originalSibling;
-        private Vector2 originalMin, originalMax, originalOffsetMin, originalOffsetMax, originalPivot;
         private BackgroundView stageBackground;
         private CellBarsOverlay bars;
         private bool narrativeStage;
         private bool narrativeVisible;
         private Vector2 restPosition;
 
+        private RectTransform sceneLayer;
         public void ApplyStage(GamePhase phase, Transform conversation)
         {
-            if (!IsConfigured || !Application.isPlaying) return;
+            if (!IsConfigured || !Application.isPlaying || conversation == null) return;
             EnsureBarsOverlay();
-            if (originalParent == null)
+            if (sceneLayer == null)
             {
-                originalParent = portraitRoot.parent;
-                originalSibling = portraitRoot.GetSiblingIndex();
-                originalMin = portraitRoot.anchorMin; originalMax = portraitRoot.anchorMax;
-                originalOffsetMin = portraitRoot.offsetMin; originalOffsetMax = portraitRoot.offsetMax;
-                originalPivot = portraitRoot.pivot;
+                var reference = conversation as RectTransform;
+                var canvas = conversation.GetComponentInParent<Canvas>();
+                if (reference == null || canvas == null) return;
+                sceneLayer = new GameObject("GuardSceneLayer", typeof(RectTransform)).GetComponent<RectTransform>();
+                sceneLayer.SetParent(canvas.transform, false);
+                sceneLayer.pivot = reference.pivot;
+                sceneLayer.anchorMin = reference.anchorMin; sceneLayer.anchorMax = reference.anchorMax;
+                sceneLayer.offsetMin = reference.offsetMin; sceneLayer.offsetMax = reference.offsetMax;
+                Transform background = canvas.transform.Find("BackgroundImage");
+                sceneLayer.SetSiblingIndex(background != null ? background.GetSiblingIndex() + 1 : 1);
             }
-            bool narrative = phase == GamePhase.Intro || phase == GamePhase.GuardReturn
-                || phase == GamePhase.InterrogationIntro || phase == GamePhase.BadEnding || phase == GamePhase.TrueEnding;
             bool questioning = phase == GamePhase.QuestionSelection || phase == GamePhase.QuestionPlayback;
-            if (narrative && conversation != null)
+            bool visiblePhase = questioning || phase == GamePhase.Intro || phase == GamePhase.GuardReturn
+                || phase == GamePhase.InterrogationIntro || phase == GamePhase.BadEnding || phase == GamePhase.TrueEnding;
+            if (portraitRoot.parent != sceneLayer)
             {
-                if (!narrativeStage || portraitRoot.parent != conversation)
-                {
-                    StopShake();
-                    portraitRoot.SetParent(conversation, false);
-                    portraitRoot.SetAsFirstSibling();
-                    portraitRoot.pivot = new Vector2(0.5f, 0.5f);
-                    ApplyNarrativeLayout();
-                    portraitRoot.offsetMin = portraitRoot.offsetMax = Vector2.zero;
-                }
-                narrativeStage = true;
-                portraitRoot.gameObject.SetActive(narrativeVisible);
+                StopShake();
+                portraitRoot.SetParent(sceneLayer, false);
+                portraitRoot.pivot = new Vector2(0.5f, 0.5f);
+                ApplyNarrativeLayout();
             }
-            else
-            {
-                if (narrativeStage)
-                {
-                    StopShake();
-                    portraitRoot.SetParent(originalParent, false);
-                    portraitRoot.SetSiblingIndex(originalSibling);
-                    portraitRoot.pivot = originalPivot;
-                    portraitRoot.anchorMin = originalMin; portraitRoot.anchorMax = originalMax;
-                    portraitRoot.offsetMin = originalOffsetMin; portraitRoot.offsetMax = originalOffsetMax;
-                }
-                narrativeStage = false;
-                if (questioning && stageBackground != null)
-                    stageBackground.TryPositionHotspot(portraitRoot, new Rect(0.255f, 0.34f, 0.145f, 0.33f));
-                portraitRoot.gameObject.SetActive(questioning);
-                if (!questioning) narrativeVisible = false;
-            }
+            narrativeStage = visiblePhase;
+            if (questioning) narrativeVisible = true;
+            if (!visiblePhase) narrativeVisible = false;
+            portraitRoot.gameObject.SetActive(visiblePhase && narrativeVisible
+                && stageBackground != null && stageBackground.CurrentBackgroundId == "BG_04");
             portraitImage.raycastTarget = false;
             placeholder.raycastTarget = false;
         }
