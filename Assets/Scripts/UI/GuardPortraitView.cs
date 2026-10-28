@@ -12,9 +12,90 @@ namespace SeaOfMemories
         [SerializeField] private TMP_Text placeholder;
         [SerializeField, Min(0f)] private float shakeSeconds = 0.18f;
         [SerializeField, Min(0f)] private float shakePixels = 8f;
+        private BackgroundView stageBackground;
+        private CellBarsOverlay bars;
+        private bool narrativeStage;
+        private bool narrativeVisible;
         private Vector2 restPosition;
+
+        private RectTransform sceneLayer;
+        public void ApplyStage(GamePhase phase, Transform conversation)
+        {
+            if (!IsConfigured || !Application.isPlaying || conversation == null) return;
+            EnsureBarsOverlay();
+            if (sceneLayer == null)
+            {
+                var reference = conversation as RectTransform;
+                var canvas = conversation.GetComponentInParent<Canvas>();
+                if (reference == null || canvas == null) return;
+                sceneLayer = new GameObject("GuardSceneLayer", typeof(RectTransform)).GetComponent<RectTransform>();
+                sceneLayer.SetParent(canvas.transform, false);
+                sceneLayer.pivot = reference.pivot;
+                sceneLayer.anchorMin = reference.anchorMin; sceneLayer.anchorMax = reference.anchorMax;
+                sceneLayer.offsetMin = reference.offsetMin; sceneLayer.offsetMax = reference.offsetMax;
+                Transform background = canvas.transform.Find("BackgroundImage");
+                sceneLayer.SetSiblingIndex(background != null ? background.GetSiblingIndex() + 1 : 1);
+            }
+            bool questioning = phase == GamePhase.QuestionSelection || phase == GamePhase.QuestionPlayback;
+            bool visiblePhase = questioning || phase == GamePhase.Intro || phase == GamePhase.GuardReturn
+                || phase == GamePhase.InterrogationIntro || phase == GamePhase.BadEnding || phase == GamePhase.TrueEnding;
+            if (portraitRoot.parent != sceneLayer)
+            {
+                StopShake();
+                portraitRoot.SetParent(sceneLayer, false);
+                portraitRoot.pivot = new Vector2(0.5f, 0.5f);
+                ApplyNarrativeLayout();
+            }
+            narrativeStage = visiblePhase;
+            if (questioning) narrativeVisible = true;
+            if (!visiblePhase) narrativeVisible = false;
+            portraitRoot.gameObject.SetActive(visiblePhase && narrativeVisible
+                && stageBackground != null && stageBackground.CurrentBackgroundId == "BG_04");
+            portraitImage.raycastTarget = false;
+            placeholder.raycastTarget = false;
+        }
+
+        private void ApplyNarrativeLayout()
+        {
+            // Narrative portraits: align the face between the second and third BG_04 rails.
+            // DialoguePanel occupies the left 80% of the Canvas; this shifts about 3.6% of the image width.
+            float shift = 0.045f;
+            portraitRoot.anchorMin = new Vector2(0.18f + shift, 0.24f);
+            portraitRoot.anchorMax = new Vector2(0.76f + shift, 0.94f);
+            portraitRoot.offsetMin = portraitRoot.offsetMax = Vector2.zero;
+        }
+
+        private void EnsureBarsOverlay()
+        {
+            if (stageBackground == null) stageBackground = GetComponent<BackgroundView>();
+            if (bars != null || stageBackground == null) return;
+            // Clip the foreground redraw to the portrait area; it must never cover other UI.
+            if (portraitRoot.GetComponent<RectMask2D>() == null) portraitRoot.gameObject.AddComponent<RectMask2D>();
+            var layer = new GameObject("CellBarsForeground", typeof(RectTransform), typeof(CanvasRenderer), typeof(CellBarsOverlay));
+            layer.transform.SetParent(portraitRoot, false);
+            bars = layer.GetComponent<CellBarsOverlay>();
+            bars.Configure(stageBackground, catalog);
+        }
+
+        private void LateUpdate()
+        {
+            // The first offscreen guard line precedes BG_04 in the authored intro.
+            if (narrativeStage && stageBackground != null && portraitRoot != null)
+                portraitRoot.gameObject.SetActive(narrativeVisible && stageBackground.CurrentBackgroundId == "BG_04");
+        }
+
+        public void HideNarrative()
+        {
+            narrativeVisible = false;
+            if (narrativeStage && portraitRoot != null) { StopShake(); portraitRoot.gameObject.SetActive(false); }
+        }
+
+        public void ShowSpeakingGuard()
+        {
+            if (narrativeStage && !narrativeVisible) SetExpression("GUARD_02");
+        }
         private float elapsed, duration, amplitude;
-        public string CurrentExpression { get; private set; } = "CH_01_normal";
+        public string CurrentExpression { get; private set; } = "GUARD_02";
         public bool IsShaking { get; private set; }
         public bool IsConfigured => catalog != null && portraitRoot != null && portraitImage != null && placeholder != null;
         public float ShakeSeconds => shakeSeconds;
@@ -38,6 +119,13 @@ namespace SeaOfMemories
                 return;
             }
             CurrentExpression = id;
+            narrativeVisible = true;
+            if (narrativeStage)
+            {
+                StopShake();
+                ApplyNarrativeLayout();
+                portraitRoot.gameObject.SetActive(true);
+            }
             Sprite sprite = catalog.GetSprite(id);
             portraitImage.sprite = sprite;
             portraitImage.preserveAspect = true;
@@ -90,7 +178,8 @@ namespace SeaOfMemories
         public void ResetView()
         {
             StopShake();
-            SetExpression("CH_01_normal");
+            SetExpression("GUARD_02");
+            HideNarrative();
         }
 
         private void OnDisable() { StopShake(); }

@@ -18,7 +18,7 @@ namespace SeaOfMemories
         [Header("Exploration click area")]
         [SerializeField, Tooltip("Use this item's area instead of the shared scene button layout.")]
         private bool useCustomHotspot;
-        [SerializeField, Tooltip("Normalized within the Closeup button parent. Origin: bottom left. X/Y/Width/Height are 0 to 1.")]
+        [SerializeField, Tooltip("Normalized within the visible background artwork. Origin: bottom left. X/Y/Width/Height are 0 to 1.")]
         private Rect hotspotRect = new Rect(0.1f, 0.2f, 0.3f, 0.4f);
 
         public string Id => id;

@@ -19,6 +19,58 @@ namespace SeaOfMemories
         [SerializeField] private ChoicePanel choices;
         [SerializeField] private Button[] furnitureButtons;
         [SerializeField] private Button returnButton;
+        private BackgroundView artworkView;
+        private void LateUpdate()
+        {
+            // Reapply on resolution/aspect changes as well as phase changes.
+            RefreshArtworkLayout();
+        }
+        private BackgroundView ArtworkView
+        {
+            get
+            {
+                if (artworkView == null) artworkView = GetComponent<BackgroundView>();
+                return artworkView;
+            }
+        }
+        private void Start()
+        {
+            AddHeadingBacking(closeupTitle);
+            Canvas canvas = closeupTitle == null ? null : closeupTitle.GetComponentInParent<Canvas>();
+            if (canvas == null) return;
+            foreach (TMP_Text label in canvas.GetComponentsInChildren<TMP_Text>(true))
+                if (label.gameObject.name == "RoomTitle") AddHeadingBacking(label);
+        }
+
+        // A separate non-interactive backing keeps headings readable on bright artwork.
+        private static void AddHeadingBacking(TMP_Text label)
+        {
+            if (label == null || label.transform.parent == null) return;
+            label.color = Color.white;
+            label.raycastTarget = false;
+            RectTransform textRect = label.rectTransform;
+            textRect.anchorMin = new Vector2(0.03f, 0.88f);
+            textRect.anchorMax = new Vector2(0.29f, 0.96f);
+            textRect.offsetMin = textRect.offsetMax = Vector2.zero;
+            Transform parent = textRect.parent;
+            string name = label.gameObject.name + "ContrastBacking";
+            if (parent.Find(name) != null) return;
+            var plate = new GameObject(name, typeof(RectTransform), typeof(Image));
+            RectTransform rect = plate.GetComponent<RectTransform>();
+            rect.SetParent(parent, false);
+            rect.anchorMin = textRect.anchorMin;
+            rect.anchorMax = textRect.anchorMax;
+            rect.pivot = textRect.pivot;
+            rect.anchoredPosition = textRect.anchoredPosition;
+            rect.sizeDelta = textRect.sizeDelta + new Vector2(24f, 12f);
+            rect.localScale = textRect.localScale;
+            rect.localRotation = textRect.localRotation;
+            rect.SetSiblingIndex(textRect.GetSiblingIndex());
+            Image image = plate.GetComponent<Image>();
+            image.color = new Color(0f, 0f, 0f, 0.75f);
+            image.raycastTarget = false;
+        }
+
         private string inspectedItemId = "";
         private int navigationFrame = -1;
         private readonly Dictionary<RectTransform, HotspotLayout> originalItemLayouts =
@@ -113,6 +165,14 @@ namespace SeaOfMemories
             if (flow.IsInventoryFull() || (catalog != null && IsFurnitureComplete(found.Id))
                 || !flow.TryEnterCloseup(found.Id)) return;
             navigationFrame = Time.frameCount;
+            PlayNavigationSound();
+        }
+
+        private void PlayNavigationSound()
+        {
+            AudioController audio = GetComponent<AudioController>();
+            if (audio == null) audio = GetComponentInChildren<AudioController>(true);
+            if (audio != null) audio.PlaySe("SE_02");
         }
 
         private FurnitureDefinition FindFurniture(string furnitureId)
@@ -137,7 +197,7 @@ namespace SeaOfMemories
             FurnitureDefinition found = FindFurniture(furnitureId);
             if (found == null) return;
             closeupTitle.text = found.Id;
-            closeupBackground.color = found.PlaceholderColor;
+            closeupBackground.color = catalog != null && catalog.GetSprite(found.BackgroundId) != null ? Color.clear : found.PlaceholderColor;
             RefreshHotspots();
         }
 
@@ -160,6 +220,8 @@ namespace SeaOfMemories
             if (!belongsHere || !flow.TryStartInspection()) return;
             navigationFrame = Time.frameCount;
             inspectedItemId = item.Id;
+            AudioController audio = GetComponentInChildren<AudioController>(true);
+            if (audio != null) audio.PlaySe("SE_03");
             inspectionView.Show(item);
             dialogue.Play(item.DescriptionSequenceId, FinishInspection);
         }
@@ -220,6 +282,7 @@ namespace SeaOfMemories
         public void RefreshHotspots()
         {
             if (flow == null) return;
+            RefreshArtworkLayout();
             if (furnitureButtons != null)
                 for (int i = 0; i < furnitureButtons.Length && i < FurnitureIds.Length; i++)
                     if (furnitureButtons[i] != null)
@@ -244,9 +307,40 @@ namespace SeaOfMemories
                 if (item == null) { SetHotspotAvailable(itemButtons[i], false); itemButtons[i].gameObject.SetActive(false); continue; }
                 itemButtons[i].GetComponentInChildren<TMP_Text>(true).text = item.DisplayName;
                 ApplyItemHotspot(itemButtons[i], item);
+                bool embeddedArtwork = catalog.GetSprite(current.BackgroundId) != null;
+                HotspotView hotspot = itemButtons[i].GetComponent<HotspotView>();
+                if (hotspot != null) hotspot.SetCursorOnly(embeddedArtwork);
+                itemButtons[i].GetComponentInChildren<TMP_Text>(true).enabled = !embeddedArtwork;
                 bool available = !flow.HasItem(item.Id);
                 SetHotspotAvailable(itemButtons[i], available && flow.Phase == GamePhase.Closeup && flow.CanInteractWithWorld());
                 itemButtons[i].gameObject.SetActive(available);
+            }
+        }
+
+        private void RefreshArtworkLayout()
+        {
+            if (flow == null || catalog == null || ArtworkView == null) return;
+            bool room = ArtworkView.CurrentBackgroundId == "BG_03";
+            if (room && furnitureButtons != null)
+                for (int i = 0; i < furnitureButtons.Length && i < FurnitureIds.Length; i++)
+                {
+                    Button button = furnitureButtons[i];
+                    FurnitureDefinition definition = catalog.GetFurniture(FurnitureIds[i]);
+                    if (button == null || definition == null || !definition.UseCustomRoomHotspot) continue;
+                    bool placed = ArtworkView.TryPositionHotspot(button.GetComponent<RectTransform>(), definition.RoomHotspotRect);
+                    HotspotView hotspot = button.GetComponent<HotspotView>();
+                    if (hotspot != null) hotspot.SetCursorOnly(placed);
+                    TMP_Text label = button.GetComponentInChildren<TMP_Text>(true);
+                    if (label != null) label.enabled = !placed;
+                }
+            if (string.IsNullOrEmpty(flow.CurrentFurnitureId) || itemButtons == null) return;
+            FurnitureDefinition current = catalog.GetFurniture(flow.CurrentFurnitureId);
+            if (current == null || ArtworkView.CurrentBackgroundId != current.BackgroundId) return;
+            for (int i = 0; i < itemButtons.Length && i < current.ItemIds.Count; i++)
+            {
+                if (itemButtons[i] == null) continue;
+                ItemDefinition item = catalog.GetItem(current.ItemIds[i]);
+                if (item != null) ApplyItemHotspot(itemButtons[i], item);
             }
         }
 
@@ -266,6 +360,7 @@ namespace SeaOfMemories
                 return;
             }
             Rect area = item.HotspotRect;
+            if (ArtworkView != null && ArtworkView.TryPositionHotspot(target, area)) return;
             target.anchorMin = area.min;
             target.anchorMax = area.max;
             target.offsetMin = Vector2.zero;
@@ -284,6 +379,7 @@ namespace SeaOfMemories
             if (flow == null || !flow.CanInteractWithWorld() || flow.Phase != GamePhase.Closeup
                 || navigationFrame == Time.frameCount) return;
             navigationFrame = Time.frameCount;
+            PlayNavigationSound();
             flow.StartExploration();
         }
     }

@@ -66,6 +66,7 @@ namespace SeaOfMemories
             StopBgm();
             activeBgm = bgmA;
             activeBgm.clip = clip;
+            activeBgm.loop = id != "BGM_04";
             activeBgm.volume = bgmVolume;
             activeBgm.Play();
             CurrentBgmId = id;
@@ -86,6 +87,7 @@ namespace SeaOfMemories
             AudioSource incoming = outgoing == bgmA ? bgmB : bgmA;
             incoming.Stop();
             incoming.clip = clip;
+            incoming.loop = id != "BGM_04";
             incoming.volume = 0f;
             incoming.Play();
             activeBgm = incoming;
@@ -110,6 +112,35 @@ namespace SeaOfMemories
             outgoing.volume = 0f;
             incoming.volume = bgmVolume;
             fadeRoutine = null;
+        }
+
+        // Fade both sources, including an interrupted cross-fade, before enabling name entry.
+        public void FadeOutBgm(float seconds, System.Action completed)
+        {
+            if (!CanPlay()) { StopBgm(); completed?.Invoke(); return; }
+            CancelCrossFade();
+            if (float.IsNaN(seconds) || float.IsInfinity(seconds) || seconds <= 0f)
+            { StopBgm(); completed?.Invoke(); return; }
+            fadeRoutine = StartCoroutine(FadeToSilence(seconds, completed));
+        }
+
+        private IEnumerator FadeToSilence(float seconds, System.Action completed)
+        {
+            float first = bgmA.volume, second = bgmB.volume, elapsed = 0f;
+            while (elapsed < seconds)
+            {
+                yield return null;
+                elapsed += Time.unscaledDeltaTime;
+                float remaining = 1f - Mathf.Clamp01(elapsed / seconds);
+                bgmA.volume = first * remaining;
+                bgmB.volume = second * remaining;
+            }
+            bgmA.Stop(); bgmA.clip = null; bgmA.volume = 0f;
+            bgmB.Stop(); bgmB.clip = null; bgmB.volume = 0f;
+            activeBgm = null;
+            CurrentBgmId = "";
+            fadeRoutine = null;
+            completed?.Invoke();
         }
 
         public void PlaySe(string id)

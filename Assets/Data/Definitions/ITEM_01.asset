@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: ITEM_01
   m_EditorClassIdentifier: Assembly-CSharp::SeaOfMemories.ItemDefinition
   id: ITEM_01
-  displayName: Uneven pencils
+  displayName: 長さが不揃いな鉛筆
   isValid: 1
   furnitureId: DESK
-  icon: {fileID: 0}
-  largeImage: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2d82805cd65c5eb48958cd552c5e31d6, type: 3}
+  largeImage: {fileID: 21300000, guid: 2d82805cd65c5eb48958cd552c5e31d6, type: 3}
   descriptionSequenceId: ITEM_01_INSPECT
   questionSequenceId: QUESTION_ITEM_01
   replySequenceId: REPLY_ITEM_01
-  questionLabel: '[PLACEHOLDER] Ask about Uneven pencils'
-  useCustomHotspot: 0
+  questionLabel: '[仮] 長さが不揃いな鉛筆について聞く'
+  useCustomHotspot: 1
   hotspotRect:
     serializedVersion: 2
-    x: 0.1
-    y: 0.2
-    width: 0.3
-    height: 0.4
+    x: 0.235
+    y: 0.32
+    width: 0.125
+    height: 0.245

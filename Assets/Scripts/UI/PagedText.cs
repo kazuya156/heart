@@ -16,6 +16,25 @@ namespace SeaOfMemories
         public bool IsPageRevealed => text == null || PageNumber == 0
             || text.maxVisibleCharacters >= ends[PageNumber - 1];
 
+        public string VisiblePageText
+        {
+            get
+            {
+                if (text == null || PageNumber == 0) return "";
+                var result = new System.Text.StringBuilder();
+                int end = Mathf.Min(ends[PageNumber - 1], text.maxVisibleCharacters);
+                for (int i = starts[PageNumber - 1]; i < end; i++)
+                {
+                    TMP_CharacterInfo character = text.textInfo.characterInfo[i];
+                    uint code = character.textElement != null ? character.textElement.unicode : character.character;
+                    if (code <= 0x10FFFF && !(code >= 0xD800 && code <= 0xDFFF))
+                        result.Append(char.ConvertFromUtf32((int)code));
+                    else result.Append(character.character);
+                }
+                return result.ToString();
+            }
+        }
+
         public void Show(TMP_Text target, string value, bool revealImmediately = false)
         {
             Clear();

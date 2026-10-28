@@ -37,8 +37,8 @@ namespace SeaOfMemories.EditorTools
                 var catalog = host.AddComponent<ContentCatalog>();
                 catalog.ConfigureSprites(new[]
                 {
-                    new SpriteCatalogEntry {id = "CH_01_normal"}, new SpriteCatalogEntry {id = "shaken1"},
-                    new SpriteCatalogEntry {id = "shaken2"}, new SpriteCatalogEntry {id = "limit"}, new SpriteCatalogEntry {id = "smile"}
+                    new SpriteCatalogEntry {id = "GUARD_01"}, new SpriteCatalogEntry {id = "GUARD_02"}, new SpriteCatalogEntry {id = "GUARD_03"},
+                    new SpriteCatalogEntry {id = "GUARD_04"}, new SpriteCatalogEntry {id = "GUARD_05"}, new SpriteCatalogEntry {id = "GUARD_06"}
                 });
                 Image fade = ImageChild("Fade", host.transform);
                 effects = host.AddComponent<ScreenEffects>();
@@ -56,10 +56,10 @@ namespace SeaOfMemories.EditorTools
                 label.raycastTarget = false;
                 portrait = host.AddComponent<GuardPortraitView>();
                 portrait.Configure(catalog, portraitRoot, guard, label);
-                portrait.SetExpression("CH_01_shaken1");
-                Require(portrait.CurrentExpression == "shaken1", "Expression alias resolution.");
+                portrait.SetExpression("GUARD_03");
+                Require(portrait.CurrentExpression == "GUARD_03", "Expression alias resolution.");
                 portrait.SetExpression("");
-                Require(portrait.CurrentExpression == "shaken1", "Empty expression changed the portrait.");
+                Require(portrait.CurrentExpression == "GUARD_03", "Empty expression changed the portrait.");
                 effects.SetComboLevel(0);
                 Require(effects.VignetteAlpha == 0f, "Combo zero is not clear.");
                 effects.SetComboLevel(1); weak = effects.VignetteAlpha;
@@ -113,7 +113,7 @@ namespace SeaOfMemories.EditorTools
                 effects.FadeOutVignette(0f);
                 portrait.Shake(0f, 8f);
                 portrait.ResetView();
-                Require(effects.VignetteAlpha == 0f && !portrait.IsShaking && portrait.CurrentExpression == "CH_01_normal",
+                Require(effects.VignetteAlpha == 0f && !portrait.IsShaking && portrait.CurrentExpression == "GUARD_02",
                     "Zero-duration/reset failed.");
                 Cleanup();
                 Debug.Log("[SeaOfMemories] Question visual checks passed: intensity levels, expression IDs, timeScale=0, fade/shake completion, interruption and reset.");

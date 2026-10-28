@@ -115,6 +115,7 @@ namespace SeaOfMemories
             if (cursorImage == null) return;
             Sprite normal = normalSprite != null ? normalSprite : placeholderSprite;
             cursorImage.sprite = hovered && hoverSprite != null ? hoverSprite : normal;
+            cursorImage.color = hovered ? new Color(1f, 0.82f, 0.2f, 1f) : Color.white;
             cursorImage.rectTransform.pivot = pointerPivot;
             float size = Mathf.Max(1f, hovered ? hoverSize : normalSize);
             cursorImage.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size);

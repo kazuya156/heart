@@ -13,8 +13,15 @@ MonoBehaviour:
   m_Name: BED
   m_EditorClassIdentifier: Assembly-CSharp::SeaOfMemories.FurnitureDefinition
   id: BED
-  backgroundId: BG_04
+  backgroundId: BG_06
   itemIds:
   - ITEM_03
   - ITEM_04
   placeholderColor: {r: 0.1, g: 0.14, b: 0.23, a: 1}
+  useCustomRoomHotspot: 1
+  roomHotspotRect:
+    serializedVersion: 2
+    x: 0.705
+    y: 0.14
+    width: 0.108
+    height: 0.64

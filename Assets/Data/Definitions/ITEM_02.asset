@@ -13,12 +13,19 @@ MonoBehaviour:
   m_Name: ITEM_02
   m_EditorClassIdentifier: Assembly-CSharp::SeaOfMemories.ItemDefinition
   id: ITEM_02
-  displayName: Scribbles
+  displayName: ヒーローものの落書き
   isValid: 0
   furnitureId: DESK
-  icon: {fileID: 0}
-  largeImage: {fileID: 0}
-  descriptionSequenceId: DESC_ITEM_02
+  icon: {fileID: 21300000, guid: 70bd180ef836c6148ab2f071789a0e80, type: 3}
+  largeImage: {fileID: 21300000, guid: 70bd180ef836c6148ab2f071789a0e80, type: 3}
+  descriptionSequenceId: ITEM_02_INSPECT
   questionSequenceId: QUESTION_ITEM_02
   replySequenceId: REPLY_ITEM_02
-  questionLabel: '[PLACEHOLDER] Ask about Scribbles'
+  questionLabel: '[仮] ヒーローものの落書きについて聞く'
+  useCustomHotspot: 1
+  hotspotRect:
+    serializedVersion: 2
+    x: 0.37
+    y: 0.27
+    width: 0.36
+    height: 0.295

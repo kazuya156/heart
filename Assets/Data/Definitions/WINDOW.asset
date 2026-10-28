@@ -13,8 +13,15 @@ MonoBehaviour:
   m_Name: WINDOW
   m_EditorClassIdentifier: Assembly-CSharp::SeaOfMemories.FurnitureDefinition
   id: WINDOW
-  backgroundId: BG_05
+  backgroundId: BG_07
   itemIds:
   - ITEM_05
   - ITEM_06
   placeholderColor: {r: 0.05, g: 0.22, b: 0.27, a: 1}
+  useCustomRoomHotspot: 1
+  roomHotspotRect:
+    serializedVersion: 2
+    x: 0.1
+    y: 0.28
+    width: 0.15
+    height: 0.57

@@ -19,7 +19,7 @@ namespace SeaOfMemories.EditorTools
                 for (int i = 0; i < items.Length; i++)
                 {
                     items[i] = ScriptableObject.CreateInstance<ItemDefinition>();
-                    items[i].Configure("ITEM_0" + (i + 1), "TEST", i % 2 == 0, owners[i], "TEST_DESC");
+                    items[i].Configure("ITEM_0" + (i + 1), "TEST", i == 0 || i == 2 || i == 5, owners[i], "TEST_DESC");
                 }
                 // 仕様から書いた8パターンの期待値。実装と同じ計算式は使わない。
                 var scores = new Dictionary<string, int[]>

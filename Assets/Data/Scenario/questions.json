@@ -1,0 +1,185 @@
+{
+  "sequences": [
+    {
+      "id": "INTERROGATION_INTRO",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER INTERROGATION INTRO 1/2] ..."
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER INTERROGATION INTRO 2/2] ..."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_01",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_01] What can you tell me about the uneven pencils?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_01",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_01] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_02",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_02] What can you tell me about the scribbled notes?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_02",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_02] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_03",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_03] What can you tell me about the small clothes?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_03",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_03] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_04",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_04] What can you tell me about the 2 AM alarm?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_04",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_04] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_05",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_05] What can you tell me about the horizon?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_05",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_05] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_ITEM_06",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER QUESTION ITEM_06] What can you tell me about the certificate?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "REPLY_ITEM_06",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "[PLACEHOLDER FIXED REPLY ITEM_06] This is the guard response for this information."
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_PROMPT",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER THOUGHT] Which information should I ask about?"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_MISSING_INFO",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "必要な情報を持っていない"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_VALID_REACTION",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "ッ！"
+        }
+      ],
+      "nextSequenceId": ""
+    }
+  ]
+}

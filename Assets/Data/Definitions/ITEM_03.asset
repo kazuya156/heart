@@ -13,12 +13,19 @@ MonoBehaviour:
   m_Name: ITEM_03
   m_EditorClassIdentifier: Assembly-CSharp::SeaOfMemories.ItemDefinition
   id: ITEM_03
-  displayName: Small clothes
+  displayName: 子供向けの不用品
   isValid: 1
   furnitureId: BED
-  icon: {fileID: 0}
-  largeImage: {fileID: 0}
-  descriptionSequenceId: DESC_ITEM_03
+  icon: {fileID: 21300000, guid: f1dba9a4a60574f439c7fde7e357ba9d, type: 3}
+  largeImage: {fileID: 21300000, guid: f1dba9a4a60574f439c7fde7e357ba9d, type: 3}
+  descriptionSequenceId: ITEM_03_INSPECT
   questionSequenceId: QUESTION_ITEM_03
   replySequenceId: REPLY_ITEM_03
-  questionLabel: '[PLACEHOLDER] Ask about Small clothes'
+  questionLabel: '[仮] 子供向けの不用品について聞く'
+  useCustomHotspot: 1
+  hotspotRect:
+    serializedVersion: 2
+    x: 0.49
+    y: 0.15
+    width: 0.31
+    height: 0.31

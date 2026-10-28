@@ -13,12 +13,19 @@ MonoBehaviour:
   m_Name: ITEM_04
   m_EditorClassIdentifier: Assembly-CSharp::SeaOfMemories.ItemDefinition
   id: ITEM_04
-  displayName: Alarm clock at 2 AM
+  displayName: 午前2時の目覚まし時計
   isValid: 0
   furnitureId: BED
-  icon: {fileID: 0}
-  largeImage: {fileID: 0}
-  descriptionSequenceId: DESC_ITEM_04
+  icon: {fileID: 21300000, guid: 87458691eb54a1746beb40c8c445eefb, type: 3}
+  largeImage: {fileID: 21300000, guid: 87458691eb54a1746beb40c8c445eefb, type: 3}
+  descriptionSequenceId: ITEM_04_INSPECT
   questionSequenceId: QUESTION_ITEM_04
   replySequenceId: REPLY_ITEM_04
-  questionLabel: '[PLACEHOLDER] Ask about Alarm clock at 2 AM'
+  questionLabel: '[仮] 午前2時の目覚まし時計について聞く'
+  useCustomHotspot: 1
+  hotspotRect:
+    serializedVersion: 2
+    x: 0.18
+    y: 0.55
+    width: 0.07
+    height: 0.14
