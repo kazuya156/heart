@@ -29,12 +29,12 @@ namespace SeaOfMemories
 
         public static readonly string[] RequiredAudioIds =
         {
-            "BGM_01", "BGM_02", "BGM_03", "BGM_04",
-            "SE_01", "SE_02", "SE_03", "SE_05", "SE_06", "SE_07", "SE_08", "SE_09"
+            "BGM_01", "BGM_02", "BGM_03", "BGM_04", "BGM_05",
+            "SE_01", "SE_02", "SE_03", "SE_05", "SE_06", "SE_07", "SE_08", "SE_09", "SE_10"
         };
 
         public static readonly string[] RequiredBackgroundIds =
-        { "BG_TITLE", "BG_01", "BG_02", "BG_03", "BG_04", "BG_05", "BG_06", "BG_07" };
+        { "BG_01", "BG_02", "BG_03", "BG_04", "BG_05", "BG_06", "BG_07", "BG_08", "BG_09" };
 
         public static bool IsBackgroundId(string id)
         {
@@ -57,13 +57,13 @@ namespace SeaOfMemories
 
         public static bool IsBgmId(string id)
         {
-            return id == "BGM_01" || id == "BGM_02" || id == "BGM_03" || id == "BGM_04";
+            return id == "BGM_01" || id == "BGM_02" || id == "BGM_03" || id == "BGM_04" || id == "BGM_05";
         }
 
         public static bool IsSeId(string id)
         {
             return id == "SE_01" || id == "SE_02" || id == "SE_03" || id == "SE_05"
-                || id == "SE_06" || id == "SE_07" || id == "SE_08" || id == "SE_09";
+                || id == "SE_06" || id == "SE_07" || id == "SE_08" || id == "SE_09" || id == "SE_10";
         }
 
         public void ConfigureAudio(AudioCatalogEntry[] entries) { audioClips = entries; }
@@ -140,7 +140,7 @@ namespace SeaOfMemories
                 foreach (SpriteCatalogEntry entry in sprites)
                     if (entry == null || string.IsNullOrWhiteSpace(entry.id) || !ids.Add(NormalizeExpressionId(entry.id)))
                         return Fail("Sprite IDs are empty or duplicated.");
-            string[] required = { "CH_01_normal", "shaken1", "shaken2", "limit", "smile" };
+            string[] required = { "GUARD_01", "GUARD_02", "GUARD_03", "GUARD_04", "GUARD_05", "GUARD_06" };
             foreach (string id in required) if (!HasSpriteId(id)) return Fail("Missing portrait ID: " + id);
             if (repository != null)
                 foreach (string id in repository.GetExpressionIds())
@@ -202,7 +202,7 @@ namespace SeaOfMemories
             for (int i = 0; i < owners.Length; i++)
             {
                 FurnitureDefinition definition = GetFurniture(owners[i]);
-                if (definition == null || definition.BackgroundId != "BG_0" + (i + 3)
+                if (definition == null || definition.BackgroundId != "BG_0" + (i + 5)
                     || definition.ItemIds == null || definition.ItemIds.Count != 2)
                     return Fail("Furniture data differs from the design: " + owners[i]);
                 for (int j = 0; j < 2; j++)
@@ -210,7 +210,7 @@ namespace SeaOfMemories
                     string expectedId = "ITEM_0" + (i * 2 + j + 1);
                     if (definition.ItemIds[j] != expectedId) return Fail("Incorrect furniture/item pair: " + owners[i]);
                     ItemDefinition item = GetItem(expectedId);
-                    if (item == null || item.FurnitureId != owners[i] || item.IsValid != (j == 0))
+                    if (item == null || item.FurnitureId != owners[i] || item.IsValid != (expectedId == "ITEM_01" || expectedId == "ITEM_03" || expectedId == "ITEM_06"))
                         return Fail("Incorrect item owner or validity: " + expectedId);
                 }
             }

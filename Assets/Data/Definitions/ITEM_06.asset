@@ -13,12 +13,19 @@ MonoBehaviour:
   m_Name: ITEM_06
   m_EditorClassIdentifier: Assembly-CSharp::SeaOfMemories.ItemDefinition
   id: ITEM_06
-  displayName: Endless sea
-  isValid: 0
+  displayName: 表彰状
+  isValid: 1
   furnitureId: WINDOW
-  icon: {fileID: 0}
-  largeImage: {fileID: 0}
-  descriptionSequenceId: DESC_ITEM_06
+  icon: {fileID: 21300000, guid: 6554879b25067684cb0e4cb56774dbdf, type: 3}
+  largeImage: {fileID: 21300000, guid: 6554879b25067684cb0e4cb56774dbdf, type: 3}
+  descriptionSequenceId: ITEM_06_INSPECT
   questionSequenceId: QUESTION_ITEM_06
   replySequenceId: REPLY_ITEM_06
-  questionLabel: '[PLACEHOLDER] Ask about Endless sea'
+  questionLabel: '[仮] 表彰状について聞く'
+  useCustomHotspot: 1
+  hotspotRect:
+    serializedVersion: 2
+    x: 0.13
+    y: 0.115
+    width: 0.28
+    height: 0.43

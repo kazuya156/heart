@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -15,6 +16,23 @@ namespace SeaOfMemories
             "ITEM_01", "ITEM_02", "ITEM_03", "ITEM_04", "ITEM_05", "ITEM_06"
         };
         public const int MaxItemCount = 4;
+        public const int MaxPlayerNameLength = 12;
+        public string PlayerName { get; private set; } = "";
+
+        public static bool IsValidPlayerName(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return false;
+            string trimmed = value.Trim();
+            foreach (char c in trimmed) if (char.IsControl(c)) return false;
+            return new StringInfo(trimmed).LengthInTextElements <= MaxPlayerNameLength;
+        }
+
+        public bool TrySetPlayerName(string value)
+        {
+            if (!IsValidPlayerName(value)) return false;
+            PlayerName = value.Trim();
+            return true;
+        }
 
         public GameSession() { itemView = itemIds.AsReadOnly(); }
 
@@ -64,6 +82,7 @@ namespace SeaOfMemories
 
         public void Reset()
         {
+            PlayerName = "";
             itemIds.Clear();
             askedIds.Clear();
             QuestionCount = 0;

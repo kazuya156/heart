@@ -8587,6 +8587,9 @@ MonoBehaviour:
   optionContainer: {fileID: 1993960939}
   optionTemplate: {fileID: 1615483581}
   audioController: {fileID: 1922852113}
+  minimumOptionHeight: 84
+  optionPadding: {x: 24, y: 14}
+  optionSpacing: 18
 --- !u!114 &1030016181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8929,7 +8932,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SeaOfMemories.GameFlowController
   repository: {fileID: 1084275179}
-  scenario: {fileID: 4900000, guid: f32abad41adda8b428f5b3696728c264, type: 3}
+  scenario: {fileID: 0}
+  scenarios:
+  - {fileID: 4900000, guid: 30ab5863e59ff274bbd58c25edae2777, type: 3}
+  - {fileID: 4900000, guid: f52fefa81a3744d45a9117b2b2485046, type: 3}
+  - {fileID: 4900000, guid: 6d5a015ef5d24daa8c44482cbcc15557, type: 3}
+  - {fileID: 4900000, guid: c8b8489a6e6247f7b5e71e83794e4d90, type: 3}
+  - {fileID: 4900000, guid: 152558f1510d4f60921fe1bd93b91de2, type: 3}
   dialogue: {fileID: 1084275178}
   input: {fileID: 1084275177}
   titlePanel: {fileID: 1609499661}
@@ -9033,57 +9042,77 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8f38a6de4dcdb2d41b0509a5a885d346, type: 2}
   repository: {fileID: 1084275179}
   sprites:
-  - id: CH_01_normal
-    sprite: {fileID: 0}
-  - id: shaken1
-    sprite: {fileID: 0}
-  - id: shaken2
-    sprite: {fileID: 0}
-  - id: limit
-    sprite: {fileID: 0}
-  - id: smile
-    sprite: {fileID: 0}
-  - id: BG_TITLE
-    sprite: {fileID: 0}
   - id: BG_01
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: a4e9a8e5f6852e94c9b240869da1d0b2, type: 3}
   - id: BG_02
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: be86a75fbba2a8a4488a15fa72e8720b, type: 3}
   - id: BG_03
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 3402e8f4681bd83499afa139ab8ba6d8, type: 3}
   - id: BG_04
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: db5f6ceb95c730a4890b83e415806933, type: 3}
   - id: BG_05
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 51a40a36759be3847b3391fbe800f8ac, type: 3}
   - id: BG_06
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 7b1674a56ff47e740b3ba86004a49eb8, type: 3}
   - id: BG_07
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 62178cd615e244548950ead5e2dd4c27, type: 3}
+  - id: BG_08
+    sprite: {fileID: 21300000, guid: 011496cb98af05143884a0f7c3c92179, type: 3}
+  - id: BG_09
+    sprite: {fileID: 21300000, guid: 0fb158c63183a3e449d083dbf0b83d19, type: 3}
+  - id: GUARD_01
+    sprite: {fileID: 21300000, guid: c35e11b48bd52494389a784fc77b121b, type: 3}
+  - id: GUARD_02
+    sprite: {fileID: 21300000, guid: bce6e959f5f45d941b02e6a7f156aca9, type: 3}
+  - id: GUARD_03
+    sprite: {fileID: 21300000, guid: 376e37fac0faacd41963db556c6a3d6e, type: 3}
+  - id: GUARD_04
+    sprite: {fileID: 21300000, guid: a29e58a09eb864e449b2d10156252d76, type: 3}
+  - id: GUARD_05
+    sprite: {fileID: 21300000, guid: 83b52589366e0284c8a83bbbec73e426, type: 3}
+  - id: GUARD_06
+    sprite: {fileID: 21300000, guid: 65c63f217f73db44a8eb989cb5074a0b, type: 3}
+  - id: ITEM_01
+    sprite: {fileID: 21300000, guid: 2d82805cd65c5eb48958cd552c5e31d6, type: 3}
+  - id: ITEM_02
+    sprite: {fileID: 21300000, guid: 70bd180ef836c6148ab2f071789a0e80, type: 3}
+  - id: ITEM_03
+    sprite: {fileID: 21300000, guid: f1dba9a4a60574f439c7fde7e357ba9d, type: 3}
+  - id: ITEM_04
+    sprite: {fileID: 21300000, guid: 87458691eb54a1746beb40c8c445eefb, type: 3}
+  - id: ITEM_05
+    sprite: {fileID: 21300000, guid: e901b02202e0cc14198092673ff9ad20, type: 3}
+  - id: ITEM_06
+    sprite: {fileID: 21300000, guid: 6554879b25067684cb0e4cb56774dbdf, type: 3}
   audioClips:
   - id: BGM_01
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: f9201b3e6e114eb40b2e479320628ae1, type: 3}
   - id: BGM_02
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 4f69c0b262cd5e644b677250457a4d58, type: 3}
   - id: BGM_03
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 219acf338dd4d6641a8b3e45a143b2c9, type: 3}
   - id: BGM_04
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: c7033da8d7596f44180ef2ff5f56fb88, type: 3}
+  - id: BGM_05
+    clip: {fileID: 8300000, guid: b36ba25c43547f94c8dccff78f393424, type: 3}
   - id: SE_01
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 187712dc1c670114fb99ec2de8b0ba5d, type: 3}
   - id: SE_02
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 97b64f9b14487e1449bd29e30db4ed73, type: 3}
   - id: SE_03
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 95378c3f42729b54c9b2e7eeb8164f85, type: 3}
   - id: SE_05
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: c44a1e89d52412f439e0e3b8e925c8a0, type: 3}
   - id: SE_06
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: b383dbf1249acd84a8c638a4f24596e1, type: 3}
   - id: SE_07
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: dd881ebb5c5366c4dbc337ccd7d953d8, type: 3}
   - id: SE_08
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: cb5813dbe2280c54490e0e1bdb65dce6, type: 3}
   - id: SE_09
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 4750254b3eb12b944846c1aa8de54de0, type: 3}
+  - id: SE_10
+    clip: {fileID: 8300000, guid: fafd613e13e07b04dbe71482b3ea339a, type: 3}
 --- !u!114 &1084275185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16424,7 +16453,7 @@ MonoBehaviour:
   bgmVolume: 0.18
   seVolume: 0.45
   bgmFadeSeconds: 0.5
-  useTemporaryTestTones: 1
+  useTemporaryTestTones: 0
 --- !u!4 &1922852114
 Transform:
   m_ObjectHideFlags: 0

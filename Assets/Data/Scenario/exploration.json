@@ -199,6 +199,17 @@
         }
       ],
       "nextSequenceId": ""
+    },
+    {
+      "id": "PICKUP_REACTION_4",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "[PLACEHOLDER PICKUP 4/4] ..."
+        }
+      ],
+      "nextSequenceId": ""
     }
   ]
 }

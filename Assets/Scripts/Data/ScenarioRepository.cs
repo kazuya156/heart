@@ -49,22 +49,28 @@ namespace SeaOfMemories
         public bool HasBackgroundCommands { get; private set; }
         public bool HasAudioCommands { get; private set; }
 
-        public bool Load(TextAsset json)
+        public bool Load(TextAsset json) { return LoadAll(new[] { json }); }
+
+        public bool LoadAll(TextAsset[] files)
         {
             sequences.Clear();
             HasChoices = false;
             HasExpressions = false;
             HasBackgroundCommands = false;
             HasAudioCommands = false;
-            if (json == null)
-                return Fail("Scenario JSON is not assigned.");
-
-            ScenarioFile file;
-            try { file = JsonUtility.FromJson<ScenarioFile>(json.text); }
-            catch (Exception error) { return Fail("Invalid JSON: " + error.Message); }
-
-            if (file == null || file.sequences == null || file.sequences.Length == 0)
-                return Fail("Scenario has no sequences.");
+            if (files == null || files.Length == 0) return Fail("No scenario files assigned.");
+            var combined = new List<ScenarioSequence>();
+            foreach (TextAsset json in files)
+            {
+                if (json == null) return Fail("A scenario file is missing.");
+                ScenarioFile parsed;
+                try { parsed = JsonUtility.FromJson<ScenarioFile>(json.text); }
+                catch (Exception error) { return Fail(json.name + ": " + error.Message); }
+                if (parsed == null || parsed.sequences == null || parsed.sequences.Length == 0)
+                    return Fail("Scenario has no sequences: " + json.name);
+                combined.AddRange(parsed.sequences);
+            }
+            var file = new ScenarioFile { sequences = combined.ToArray() };
 
             foreach (ScenarioSequence sequence in file.sequences)
             {

@@ -14,6 +14,19 @@ namespace SeaOfMemories
         [SerializeField] private Color highlightColor = new Color(0.5f, 1f, 1f, 0.45f);
         [SerializeField, Range(0f, 1f)] private float fallbackBrightness = 0.15f;
         private bool available = true;
+        private bool cursorOnly;
+        public void SetCursorOnly(bool value)
+        {
+            if (cursorOnly == value) return;
+            cursorOnly = value;
+            if (button != null && button.targetGraphic != null)
+            {
+                if (!capturedColor) { baseColor = button.targetGraphic.color; capturedColor = true; }
+                button.transition = value ? Selectable.Transition.None : Selectable.Transition.ColorTint;
+                button.targetGraphic.color = value ? Color.clear : baseColor;
+            }
+            SetHighlight(false);
+        }
         private bool pointerInside;
         private bool capturedColor;
         private Color baseColor;
@@ -64,9 +77,9 @@ namespace SeaOfMemories
             {
                 if (value && changed)
                     foreach (Image edge in highlightFrame.GetComponentsInChildren<Image>(true)) edge.color = highlightColor;
-                highlightFrame.SetActive(value);
+                highlightFrame.SetActive(value && !cursorOnly);
             }
-            else if (button != null && button.targetGraphic != null)
+            else if (!cursorOnly && button != null && button.targetGraphic != null)
             {
                 if (!capturedColor) { baseColor = button.targetGraphic.color; capturedColor = true; }
                 button.targetGraphic.color = !value ? baseColor : new Color(Mathf.Min(1f, baseColor.r + fallbackBrightness),

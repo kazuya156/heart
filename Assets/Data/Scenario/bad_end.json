@@ -1,0 +1,23 @@
+{
+  "sequences": [
+    {
+      "id": "BAD_END",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER BAD END] The three questions did not uncover the truth.",
+          "seId": "SE_07"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER] The final text ends here. Advance to return to the title.",
+          "seId": "SE_08",
+          "backgroundId": "BG_09"
+        }
+      ],
+      "nextSequenceId": ""
+    }
+  ]
+}

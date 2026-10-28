@@ -11,6 +11,13 @@ namespace SeaOfMemories
         [SerializeField] private string[] itemIds;
         [SerializeField] private Color placeholderColor = new Color(0.06f, 0.16f, 0.21f);
 
+        [Header("Room artwork click area")]
+        [SerializeField] private bool useCustomRoomHotspot;
+        [SerializeField, Tooltip("Normalized within BG_03 artwork, origin bottom-left.")]
+        private Rect roomHotspotRect;
+        public bool UseCustomRoomHotspot => useCustomRoomHotspot;
+        public Rect RoomHotspotRect => roomHotspotRect;
+
         public string Id => id;
         public string BackgroundId => backgroundId;
         public System.Collections.Generic.IReadOnlyList<string> ItemIds => itemIds;

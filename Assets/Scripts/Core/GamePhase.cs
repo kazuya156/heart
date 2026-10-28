@@ -6,6 +6,6 @@ namespace SeaOfMemories
         Title, Intro, Room, Closeup, Inspecting, ItemChoice,
         PickupReaction, GuardReturn, InterrogationIntro,
         QuestionSelection, QuestionPlayback,
-        BadEnding, TrueEnding, Transition
+        BadEnding, TrueEnding, Transition, FurnitureDescription, NameEntry
     }
 }

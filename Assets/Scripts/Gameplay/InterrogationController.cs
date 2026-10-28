@@ -25,6 +25,8 @@ namespace SeaOfMemories
         [SerializeField] private AudioController audioController;
         public void ConfigureAudio(AudioController controller) { audioController = controller; }
         private bool warning;
+        private float warningSecondsRemaining = -1f;
+        private const float WarningDuration = 1.5f;
         private bool presentingImmediateLine;
         private int playbackVersion;
         private string currentItemId = "";
@@ -75,6 +77,7 @@ namespace SeaOfMemories
             playbackVersion++;
             currentItemId = "";
             warning = false;
+            warningSecondsRemaining = -1f;
             presentingImmediateLine = false;
             if (effects != null) effects.SetComboLevel(0);
             if (portrait != null) portrait.ResetView();
@@ -85,6 +88,7 @@ namespace SeaOfMemories
             if (!IsConfigured || flow.Phase != GamePhase.QuestionSelection || flow.Session.QuestionCount >= 3) return;
             currentItemId = "";
             warning = false;
+            warningSecondsRemaining = -1f;
             ShowImmediateLine("QUESTION_PROMPT");
             RefreshQuestionOptions();
         }
@@ -98,7 +102,7 @@ namespace SeaOfMemories
             agitation.text = "動揺度 " + session.Agitation + "/100";
             gaugeFill.anchorMax = new Vector2(Mathf.Clamp01(session.Agitation / 100f), 1f);
             optionsRoot.SetActive(session.QuestionCount < 3);
-            bool canSelect = flow.Phase == GamePhase.QuestionSelection && !flow.IsItemDetailsOpen && !warning && !presentingImmediateLine
+            bool canSelect = flow.Phase == GamePhase.QuestionSelection && !flow.IsModalOpen && !warning && !presentingImmediateLine
                 && session.QuestionCount < 3;
             for (int i = 0; i < buttons.Length; i++)
             {
@@ -123,7 +127,7 @@ namespace SeaOfMemories
 
         public void SelectQuestion(string itemId)
         {
-            if (!IsConfigured || input.IsConsumedThisFrame || flow.IsItemDetailsOpen || warning || presentingImmediateLine
+            if (!IsConfigured || input.IsConsumedThisFrame || flow.IsModalOpen || warning || presentingImmediateLine
                 || flow.Phase != GamePhase.QuestionSelection || flow.Session.QuestionCount >= 3) return;
             ItemDefinition item = catalog.GetItem(itemId);
             if (item == null || flow.Session.HasAsked(itemId)) return;
@@ -132,6 +136,7 @@ namespace SeaOfMemories
             {
                 input.SuppressForCurrentFrame();
                 warning = true;
+                warningSecondsRemaining = -1f;
                 ShowImmediateLine("QUESTION_MISSING_INFO");
                 RefreshQuestionOptions();
                 return;
@@ -141,19 +146,35 @@ namespace SeaOfMemories
 
         public bool TryDismissWarning()
         {
-            if (flow.Phase != GamePhase.QuestionSelection || flow.IsItemDetailsOpen) return false;
+            if (flow.Phase != GamePhase.QuestionSelection || flow.IsModalOpen) return false;
             if (dialogue.TryAdvanceImmediatePage())
             {
                 input.SuppressForCurrentFrame();
                 return true;
             }
-            if (!warning || presentingImmediateLine) return false;
+            if (!warning) return false;
+            if (!presentingImmediateLine) RestoreQuestionPrompt();
+            else input.SuppressForCurrentFrame();
+            return true;
+        }
+
+        private void Update()
+        {
+            if (!warning || presentingImmediateLine || warningSecondsRemaining < 0f
+                || flow == null || dialogue == null || flow.Phase != GamePhase.QuestionSelection
+                || flow.IsTransitioning || flow.IsModalOpen || dialogue.IsPaused) return;
+            warningSecondsRemaining -= Time.unscaledDeltaTime;
+            if (warningSecondsRemaining > 0f) return;
+            RestoreQuestionPrompt();
+        }
+
+        private void RestoreQuestionPrompt()
+        {
             warning = false;
-            if (audioController != null) audioController.PlaySe("SE_01");
+            warningSecondsRemaining = -1f;
             input.SuppressForCurrentFrame();
             ShowImmediateLine("QUESTION_PROMPT");
             RefreshQuestionOptions();
-            return true;
         }
 
         private void ShowImmediateLine(string sequenceId)
@@ -165,13 +186,15 @@ namespace SeaOfMemories
             {
                 if (version != playbackVersion || flow.Phase != GamePhase.QuestionSelection) return;
                 presentingImmediateLine = false;
+                // Start only after the complete warning (including any extra pages) is visible.
+                if (warning) warningSecondsRemaining = WarningDuration;
                 RefreshQuestionOptions();
             });
         }
 
         public void PlayQuestion(string itemId)
         {
-            if (!IsConfigured || input.IsConsumedThisFrame || warning || presentingImmediateLine || flow.IsItemDetailsOpen
+            if (!IsConfigured || input.IsConsumedThisFrame || warning || presentingImmediateLine || flow.IsModalOpen
                 || flow.Phase != GamePhase.QuestionSelection || !flow.HasItem(itemId) || flow.Session.HasAsked(itemId)) return;
             ItemDefinition item = catalog.GetItem(itemId);
             if (item == null || !flow.TryStartQuestionPlayback()) return;
@@ -190,10 +213,11 @@ namespace SeaOfMemories
                 flow.RefreshQuestionState();
                 if (item.IsValid)
                 {
+                    if (audioController != null) audioController.PlaySe("SE_05");
                     if (HasQuestionVisuals)
                     {
                         effects.SetComboLevel(result.comboAfter);
-                        portrait.SetExpression(result.comboAfter == 1 ? "shaken1" : result.comboAfter == 2 ? "shaken2" : "limit");
+                        portrait.SetExpression(result.comboAfter == 1 ? "GUARD_03" : result.comboAfter == 2 ? "GUARD_04" : "GUARD_05");
                         portrait.Shake(portrait.ShakeSeconds, portrait.ShakePixels);
                     }
                     dialogue.Play("QUESTION_VALID_REACTION", () => PlayReply(item, result, version));

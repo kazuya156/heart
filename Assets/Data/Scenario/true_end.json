@@ -1,0 +1,22 @@
+{
+  "sequences": [
+    {
+      "id": "TRUE_END",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER TRUE END] The three valid questions uncovered the truth.",
+          "seId": "SE_09"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "[PLACEHOLDER] The final text ends here. Advance to return to the title.",
+          "backgroundId": "BG_08"
+        }
+      ],
+      "nextSequenceId": ""
+    }
+  ]
+}

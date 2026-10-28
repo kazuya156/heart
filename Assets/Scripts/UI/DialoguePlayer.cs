@@ -16,12 +16,22 @@ namespace SeaOfMemories
         [SerializeField] private GuardPortraitView portrait;
         [SerializeField] private AudioController audioController;
 
+        public TMP_FontAsset DialogueFont => bodyText != null ? bodyText.font : TMP_Settings.defaultFontAsset;
+        public ConversationHistory History { get; } = new ConversationHistory();
+        public bool IsPaused => paused;
+        public void CaptureBacklog()
+        {
+            if (!playing || IsWaitingForChoice || sequence == null || pages.PageNumber == 0) return;
+            History.Record(playbackVersion + ":" + nodeVisit + ":" + pages.PageNumber,
+                speakerText.text, pages.VisiblePageText);
+        }
         private GameFlowController scenarioFlow;
         public void ConfigureScenarioFades(GameFlowController controller) { scenarioFlow = controller; }
 
         private ScenarioSequence sequence;
         private Action onComplete;
         private int nodeIndex;
+        private int nodeVisit;
         private readonly PagedText pages = new PagedText();
         public int CurrentPage => pages.PageNumber;
         public int PageCount => pages.PageCount;
@@ -36,6 +46,11 @@ namespace SeaOfMemories
         public bool HasAudioUI => audioController != null && audioController.IsConfigured;
         public void ConfigureAudio(AudioController controller) { audioController = controller; }
         public void ConfigurePortrait(GuardPortraitView view) { portrait = view; }
+        public void ApplyPortraitStage(GamePhase phase, Transform conversation)
+        {
+            if (portrait != null) portrait.ApplyStage(phase, conversation);
+        }
+        public void HideNarrativePortrait() { if (portrait != null) portrait.HideNarrative(); }
 
         public void Configure(ScenarioRepository source, TMP_Text speaker, TMP_Text body)
         {
@@ -79,6 +94,16 @@ namespace SeaOfMemories
             ShowCurrentNode();
         }
 
+        private void Start()
+        {
+            // This prototype note is development metadata, not story content.
+            Canvas canvas = GetComponentInParent<Canvas>();
+            if (canvas == null && bodyText != null) canvas = bodyText.GetComponentInParent<Canvas>();
+            if (canvas != null)
+                foreach (TMP_Text label in canvas.GetComponentsInChildren<TMP_Text>(true))
+                    if (label.name == "IntroNote") label.gameObject.SetActive(false);
+        }
+
         private void Update()
         {
             if (!playing || paused || IsWaitingForChoice) return;
@@ -92,9 +117,11 @@ namespace SeaOfMemories
             if (!pages.IsPageRevealed)
             {
                 pages.RevealPage();
+                CaptureBacklog();
                 return;
             }
 
+            CaptureBacklog();
             // 全文表示だけの入力は鳴らさず、実際のページ送りで一度だけ鳴らす。
             if (audioController != null) audioController.PlaySe("SE_01");
             // 同じノード内の改ページは、音・背景・表情指示を再実行しない。
@@ -128,6 +155,7 @@ namespace SeaOfMemories
 
         private void ShowCurrentNode()
         {
+            nodeVisit++;
             pages.Clear();
             ScenarioNode node = sequence.nodes[nodeIndex];
             if (string.IsNullOrEmpty(node.backgroundId) && node.screenEffectId != "BLACK_FADE" && node.screenEffectId != "WHITE_FADE")
@@ -136,7 +164,7 @@ namespace SeaOfMemories
             if (scenarioFlow == null || !scenarioFlow.TryPlayScenarioBackground(node.backgroundId, node.screenEffectId == "WHITE_FADE", () =>
             {
                 if (playing && request == playbackVersion) PresentCurrentNode();
-            }))
+            }, node.screenEffectId == "BLACK_FADE" || node.screenEffectId == "WHITE_FADE"))
             {
                 Debug.LogError("[SeaOfMemories] Scenario fade needs an active Flow, background and idle ScreenEffects.", this);
                 StopPlayback();
@@ -191,6 +219,7 @@ namespace SeaOfMemories
                     foreach (ChoiceOptionData option in node.options)
                         if (option.id == id)
                         {
+                            History.Record(playbackVersion + ":" + nodeVisit + ":choice", "選択", option.label);
                             JumpToSequence(option.nextSequenceId);
                             return;
                         }
@@ -209,17 +238,27 @@ namespace SeaOfMemories
                 }
                 portrait.SetExpression(node.expressionId);
             }
+            if (portrait != null)
+            {
+                // The waking backgrounds belong to the protagonist, without the guard.
+                if (node.backgroundId == "BG_08" || node.backgroundId == "BG_09") portrait.HideNarrative();
+                else if (node.speaker == "guard") portrait.ShowSpeakingGuard();
+            }
+            speakerText.richText = false;
             speakerText.text = node.speaker == "guard" ? "GUARD"
-                : node.speaker == "hero" ? "YOU" : "";
+                : node.speaker == "hero" ? (scenarioFlow != null ? scenarioFlow.PlayerName : "YOU") : "";
             pages.Show(bodyText, node.text, revealOnPresentation);
+            if (revealOnPresentation) CaptureBacklog();
             NotifyPresentationReady();
         }
 
         // 心情文/警告も長い場合は全ページを確認してから操作を解放する。
         public bool TryAdvanceImmediatePage()
         {
-            if (!playing || paused || !revealOnPresentation || IsWaitingForChoice
-                || !pages.TryNextPage(true)) return false;
+            if (!playing || paused || !revealOnPresentation || IsWaitingForChoice) return false;
+            CaptureBacklog();
+            if (!pages.TryNextPage(true)) return false;
+            CaptureBacklog();
             if (audioController != null) audioController.PlaySe("SE_01");
             NotifyPresentationReady();
             return true;
@@ -236,13 +275,13 @@ namespace SeaOfMemories
         public void Pause()
         {
             paused = true;
-            if (IsWaitingForChoice) choicePanel.SetInteractionEnabled(false);
+            if (choicePanel != null && choicePanel.IsOpen) choicePanel.SetInteractionEnabled(false);
         }
 
         public void Resume()
         {
             paused = false;
-            if (IsWaitingForChoice) choicePanel.SetInteractionEnabled(true);
+            if (choicePanel != null && choicePanel.IsOpen) choicePanel.SetInteractionEnabled(true);
         }
 
         public void StopPlayback()

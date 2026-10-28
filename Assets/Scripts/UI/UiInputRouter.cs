@@ -36,6 +36,7 @@ namespace SeaOfMemories
         public void RequestAdvance()
         {
             if (IsConsumedThisFrame || gestureConsumed) return;
+            if (flow != null && flow.IsBacklogOpen) { ConsumeGesture(); return; }
             if (flow != null && flow.IsTransitioning)
             {
                 ConsumeGesture();

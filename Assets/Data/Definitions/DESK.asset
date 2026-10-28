@@ -13,8 +13,15 @@ MonoBehaviour:
   m_Name: DESK
   m_EditorClassIdentifier: Assembly-CSharp::SeaOfMemories.FurnitureDefinition
   id: DESK
-  backgroundId: BG_03
+  backgroundId: BG_05
   itemIds:
   - ITEM_01
   - ITEM_02
   placeholderColor: {r: 0.18, g: 0.13, b: 0.09, a: 1}
+  useCustomRoomHotspot: 1
+  roomHotspotRect:
+    serializedVersion: 2
+    x: 0.285
+    y: 0.245
+    width: 0.405
+    height: 0.265

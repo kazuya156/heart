@@ -12,9 +12,106 @@ namespace SeaOfMemories
         [SerializeField] private TMP_Text placeholder;
         [SerializeField, Min(0f)] private float shakeSeconds = 0.18f;
         [SerializeField, Min(0f)] private float shakePixels = 8f;
+        private Transform originalParent;
+        private int originalSibling;
+        private Vector2 originalMin, originalMax, originalOffsetMin, originalOffsetMax, originalPivot;
+        private BackgroundView stageBackground;
+        private CellBarsOverlay bars;
+        private bool narrativeStage;
+        private bool narrativeVisible;
         private Vector2 restPosition;
+
+        public void ApplyStage(GamePhase phase, Transform conversation)
+        {
+            if (!IsConfigured || !Application.isPlaying) return;
+            EnsureBarsOverlay();
+            if (originalParent == null)
+            {
+                originalParent = portraitRoot.parent;
+                originalSibling = portraitRoot.GetSiblingIndex();
+                originalMin = portraitRoot.anchorMin; originalMax = portraitRoot.anchorMax;
+                originalOffsetMin = portraitRoot.offsetMin; originalOffsetMax = portraitRoot.offsetMax;
+                originalPivot = portraitRoot.pivot;
+            }
+            bool narrative = phase == GamePhase.Intro || phase == GamePhase.GuardReturn
+                || phase == GamePhase.InterrogationIntro || phase == GamePhase.BadEnding || phase == GamePhase.TrueEnding;
+            bool questioning = phase == GamePhase.QuestionSelection || phase == GamePhase.QuestionPlayback;
+            if (narrative && conversation != null)
+            {
+                if (!narrativeStage || portraitRoot.parent != conversation)
+                {
+                    StopShake();
+                    portraitRoot.SetParent(conversation, false);
+                    portraitRoot.SetAsFirstSibling();
+                    portraitRoot.pivot = new Vector2(0.5f, 0.5f);
+                    ApplyNarrativeLayout();
+                    portraitRoot.offsetMin = portraitRoot.offsetMax = Vector2.zero;
+                }
+                narrativeStage = true;
+                portraitRoot.gameObject.SetActive(narrativeVisible);
+            }
+            else
+            {
+                if (narrativeStage)
+                {
+                    StopShake();
+                    portraitRoot.SetParent(originalParent, false);
+                    portraitRoot.SetSiblingIndex(originalSibling);
+                    portraitRoot.pivot = originalPivot;
+                    portraitRoot.anchorMin = originalMin; portraitRoot.anchorMax = originalMax;
+                    portraitRoot.offsetMin = originalOffsetMin; portraitRoot.offsetMax = originalOffsetMax;
+                }
+                narrativeStage = false;
+                if (questioning && stageBackground != null)
+                    stageBackground.TryPositionHotspot(portraitRoot, new Rect(0.255f, 0.34f, 0.145f, 0.33f));
+                portraitRoot.gameObject.SetActive(questioning);
+                if (!questioning) narrativeVisible = false;
+            }
+            portraitImage.raycastTarget = false;
+            placeholder.raycastTarget = false;
+        }
+
+        private void ApplyNarrativeLayout()
+        {
+            // Narrative portraits: align the face between the second and third BG_04 rails.
+            // DialoguePanel occupies the left 80% of the Canvas; this shifts about 3.6% of the image width.
+            float shift = 0.045f;
+            portraitRoot.anchorMin = new Vector2(0.18f + shift, 0.24f);
+            portraitRoot.anchorMax = new Vector2(0.76f + shift, 0.94f);
+            portraitRoot.offsetMin = portraitRoot.offsetMax = Vector2.zero;
+        }
+
+        private void EnsureBarsOverlay()
+        {
+            if (stageBackground == null) stageBackground = GetComponent<BackgroundView>();
+            if (bars != null || stageBackground == null) return;
+            // Clip the foreground redraw to the portrait area; it must never cover other UI.
+            if (portraitRoot.GetComponent<RectMask2D>() == null) portraitRoot.gameObject.AddComponent<RectMask2D>();
+            var layer = new GameObject("CellBarsForeground", typeof(RectTransform), typeof(CanvasRenderer), typeof(CellBarsOverlay));
+            layer.transform.SetParent(portraitRoot, false);
+            bars = layer.GetComponent<CellBarsOverlay>();
+            bars.Configure(stageBackground, catalog);
+        }
+
+        private void LateUpdate()
+        {
+            // The first offscreen guard line precedes BG_04 in the authored intro.
+            if (narrativeStage && stageBackground != null && portraitRoot != null)
+                portraitRoot.gameObject.SetActive(narrativeVisible && stageBackground.CurrentBackgroundId == "BG_04");
+        }
+
+        public void HideNarrative()
+        {
+            narrativeVisible = false;
+            if (narrativeStage && portraitRoot != null) { StopShake(); portraitRoot.gameObject.SetActive(false); }
+        }
+
+        public void ShowSpeakingGuard()
+        {
+            if (narrativeStage && !narrativeVisible) SetExpression("GUARD_02");
+        }
         private float elapsed, duration, amplitude;
-        public string CurrentExpression { get; private set; } = "CH_01_normal";
+        public string CurrentExpression { get; private set; } = "GUARD_02";
         public bool IsShaking { get; private set; }
         public bool IsConfigured => catalog != null && portraitRoot != null && portraitImage != null && placeholder != null;
         public float ShakeSeconds => shakeSeconds;
@@ -38,6 +135,13 @@ namespace SeaOfMemories
                 return;
             }
             CurrentExpression = id;
+            narrativeVisible = true;
+            if (narrativeStage)
+            {
+                StopShake();
+                ApplyNarrativeLayout();
+                portraitRoot.gameObject.SetActive(true);
+            }
             Sprite sprite = catalog.GetSprite(id);
             portraitImage.sprite = sprite;
             portraitImage.preserveAspect = true;
@@ -90,7 +194,8 @@ namespace SeaOfMemories
         public void ResetView()
         {
             StopShake();
-            SetExpression("CH_01_normal");
+            SetExpression("GUARD_02");
+            HideNarrative();
         }
 
         private void OnDisable() { StopShake(); }
