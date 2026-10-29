@@ -24,6 +24,18 @@ namespace SeaOfMemories
         [SerializeField] private GuardPortraitView portrait;
         [SerializeField] private AudioController audioController;
         public void ConfigureAudio(AudioController controller) { audioController = controller; }
+        private ScenarioRepository QuestionRepository => GetComponent<ScenarioRepository>();
+        private bool UsesAuthoredQuestions => QuestionRepository != null && QuestionRepository.HasSequence("QUESTION_SELECTION");
+        private string QuestionLabel(ItemDefinition item)
+        {
+            if (UsesAuthoredQuestions)
+                foreach (ChoiceOptionData option in QuestionRepository.Find("QUESTION_SELECTION").nodes[0].options)
+                    if (option.id == item.Id) return option.label;
+            return item.QuestionLabel;
+        }
+        private bool awaitingAuthoredResult;
+        private QuestionResult authoredResult;
+        private int authoredVersion;
         private bool statusPanelReady;
         private bool warning;
         private float warningSecondsRemaining = -1f;
@@ -76,6 +88,7 @@ namespace SeaOfMemories
         public void ResetView()
         {
             playbackVersion++;
+            awaitingAuthoredResult = false;
             currentItemId = "";
             warning = false;
             warningSecondsRemaining = -1f;
@@ -115,7 +128,7 @@ namespace SeaOfMemories
                 RectTransform optionRect = buttons[i].GetComponent<RectTransform>();
                 optionRect.anchorMin = new Vector2(0.64f, optionRect.anchorMin.y);
                 optionRect.anchorMax = new Vector2(0.99f, optionRect.anchorMax.y);
-                labels[i].text = !owned ? "？？？" : item == null ? id : item.QuestionLabel;
+                labels[i].text = !owned ? "？？？" : item == null ? id : QuestionLabel(item);
                 labels[i].color = asked ? new Color(0.5f, 0.5f, 0.5f) : Color.white;
                 icons[i].sprite = owned && item != null ? item.Icon : null;
                 icons[i].enabled = icons[i].sprite != null;
@@ -260,6 +273,33 @@ namespace SeaOfMemories
             if (item == null || !flow.TryStartQuestionPlayback()) return;
             currentItemId = itemId;
             int version = ++playbackVersion;
+            if (UsesAuthoredQuestions)
+            {
+                authoredResult = flow.Session.TryBeginQuestion(item);
+                if (authoredResult.status != QuestionStatus.Accepted) return;
+                authoredVersion = version;
+                awaitingAuthoredResult = true;
+                dialogue.SequencePresented -= OnAuthoredSequencePresented;
+                dialogue.SequencePresented += OnAuthoredSequencePresented;
+                flow.RefreshQuestionState();
+                dialogue.Play(item.QuestionSequenceId, () =>
+                {
+                    if (!IsCurrent(version, itemId)) return;
+                    if (awaitingAuthoredResult)
+                    {
+                        Debug.LogError("[SeaOfMemories] Question completed without its RESULT: " + itemId, this);
+                        return;
+                    }
+                    QuestionResult result = authoredResult;
+                    if (item.IsValid && !(result.isFinalQuestion && result.ending == EndingType.Bad))
+                        dialogue.Play("QUESTION_COMBO_" + result.comboAfter, () =>
+                        {
+                            if (IsCurrent(version, itemId)) OnReplyFinished(result);
+                        });
+                    else OnReplyFinished(result);
+                });
+                return;
+            }
             dialogue.Play(item.QuestionSequenceId, () =>
             {
                 if (!IsCurrent(version, itemId)) return;
@@ -293,6 +333,35 @@ namespace SeaOfMemories
                     PlayReply(item, result, version);
                 }
             });
+        }
+
+        private void OnAuthoredSequencePresented(string sequenceId)
+        {
+            if (!awaitingAuthoredResult || !IsCurrent(authoredVersion, currentItemId)
+                || sequenceId != "QUESTION_" + currentItemId + "_RESULT") return;
+            awaitingAuthoredResult = false;
+            ItemDefinition item = catalog.GetItem(currentItemId);
+            authoredResult = flow.Session.CompleteQuestion(item);
+            if (authoredResult.status != QuestionStatus.Accepted)
+            {
+                Debug.LogError("[SeaOfMemories] Authored result could not be applied.", this);
+                return;
+            }
+            flow.RefreshQuestionState();
+            if (audioController != null) audioController.PlaySe(item.IsValid ? "SE_05" : "SE_06");
+            if (!HasQuestionVisuals) return;
+            if (item.IsValid)
+            {
+                effects.SetComboLevel(authoredResult.comboAfter);
+                portrait.SetExpression(authoredResult.comboAfter == 1 ? "GUARD_03" : authoredResult.comboAfter == 2 ? "GUARD_04" : "GUARD_05");
+                portrait.Shake(portrait.ShakeSeconds, portrait.ShakePixels);
+            }
+            else { portrait.StopShake(); effects.FadeOutVignette(effects.DummyFadeSeconds); }
+        }
+
+        private void OnDestroy()
+        {
+            if (dialogue != null) dialogue.SequencePresented -= OnAuthoredSequencePresented;
         }
 
         private bool IsCurrent(int version, string itemId)

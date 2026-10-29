@@ -336,6 +336,8 @@ namespace SeaOfMemories
             if (string.IsNullOrEmpty(flow.CurrentFurnitureId) || itemButtons == null) return;
             FurnitureDefinition current = catalog.GetFurniture(flow.CurrentFurnitureId);
             if (current == null || ArtworkView.CurrentBackgroundId != current.BackgroundId) return;
+            if (returnButton != null)
+                ArtworkView.TryPositionHotspot(returnButton.GetComponent<RectTransform>(), new Rect(0.65f, 0.05f, 0.15f, 0.085f));
             for (int i = 0; i < itemButtons.Length && i < current.ItemIds.Count; i++)
             {
                 if (itemButtons[i] == null) continue;

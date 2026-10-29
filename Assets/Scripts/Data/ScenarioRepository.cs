@@ -25,6 +25,8 @@ namespace SeaOfMemories
         public string speaker;
         public string text;
         public string expressionId;
+        public string portraitAction;
+        public string speakerName;
         public string backgroundId;
         public string seId;
         public string bgmId;
@@ -85,6 +87,8 @@ namespace SeaOfMemories
                 {
                     if (node == null || (node.type != "line" && node.type != "choice"))
                         return Fail("Unknown node type in: " + sequence.id);
+                    if (!string.IsNullOrEmpty(node.portraitAction) && node.portraitAction != "show" && node.portraitAction != "hide")
+                        return Fail("Unknown portraitAction in: " + sequence.id);
                     if (node.type == "line")
                     {
                         if (node.text == null)
@@ -167,6 +171,8 @@ namespace SeaOfMemories
                     if (!string.IsNullOrEmpty(node.seId)) yield return node.seId;
                 }
         }
+
+        public bool HasSequence(string id) { return !string.IsNullOrEmpty(id) && sequences.ContainsKey(id); }
 
         public ScenarioSequence Find(string sequenceId)
         {

@@ -56,6 +56,38 @@ namespace SeaOfMemories
             return true;
         }
 
+        private Coroutine glassShake;
+        private Vector2 shakeRest;
+        public bool PlayGlassShake()
+        {
+            if (!IsConfigured || !isActiveAndEnabled || !Application.isPlaying) return false;
+            StopGlassShake();
+            shakeRest = artwork.rectTransform.anchoredPosition;
+            glassShake = StartCoroutine(ShakeGlass());
+            return true;
+        }
+        private System.Collections.IEnumerator ShakeGlass()
+        {
+            float elapsed = 0f;
+            while (elapsed < 0.18f)
+            {
+                yield return null;
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / 0.18f);
+                artwork.rectTransform.anchoredPosition = shakeRest + Vector2.right * (Mathf.Sin(t * 6f * Mathf.PI) * 8f * (1f - t));
+            }
+            artwork.rectTransform.anchoredPosition = shakeRest;
+            glassShake = null;
+        }
+        private void StopGlassShake()
+        {
+            if (glassShake == null) return;
+            StopCoroutine(glassShake);
+            glassShake = null;
+            if (artwork != null) artwork.rectTransform.anchoredPosition = shakeRest;
+        }
+        private void OnDisable() { StopGlassShake(); }
+
         public bool SetBackground(string id)
         {
             if (string.IsNullOrEmpty(id)) return true; // 空の指示は表示維持。
@@ -64,6 +96,7 @@ namespace SeaOfMemories
                 Debug.LogError("[SeaOfMemories] Background references or ID are missing: " + id, this);
                 return false;
             }
+            StopGlassShake();
             Sprite sprite = catalog.GetSprite(id);
             CurrentBackgroundId = id;
             // 未受領の画像へ切り替えた時も、直前のSpriteを必ず外す。

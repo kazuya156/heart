@@ -17,6 +17,7 @@ namespace SeaOfMemories
         [SerializeField] private AudioController audioController;
 
         public TMP_FontAsset DialogueFont => bodyText != null ? bodyText.font : TMP_Settings.defaultFontAsset;
+        public event Action<string> SequencePresented;
         public ConversationHistory History { get; } = new ConversationHistory();
         public bool IsPaused => paused;
         public void CaptureBacklog()
@@ -174,29 +175,6 @@ namespace SeaOfMemories
         private void PresentCurrentNode()
         {
             ScenarioNode node = sequence.nodes[nodeIndex];
-            if (!string.IsNullOrEmpty(node.bgmId) || !string.IsNullOrEmpty(node.seId))
-            {
-                if (!HasAudioUI)
-                {
-                    Debug.LogError("[SeaOfMemories] Scenario audio needs step 11 audio setup.", this);
-                    StopPlayback();
-                    return;
-                }
-                // ノードへの入場時だけ。文字更新・全文表示・Pause/Resumeでは呼ばない。
-                if (!string.IsNullOrEmpty(node.bgmId)) audioController.CrossFadeBgm(node.bgmId, audioController.BgmFadeSeconds);
-                if (!string.IsNullOrEmpty(node.seId)) audioController.PlaySe(node.seId);
-            }
-            if (node.screenEffectId == "GLASS_SHAKE")
-            {
-                if (!HasPortraitUI)
-                {
-                    Debug.LogError("[SeaOfMemories] GLASS_SHAKE needs the configured portrait view.", this);
-                    StopPlayback();
-                    return;
-                }
-                // 入場時に一度だけ。全文表示や読み返し復帰では再実行しない。
-                portrait.Shake(portrait.ShakeSeconds, portrait.ShakePixels);
-            }
             if (node.type == "choice")
             {
                 if (!HasChoiceUI)
@@ -238,16 +216,46 @@ namespace SeaOfMemories
                 }
                 portrait.SetExpression(node.expressionId);
             }
+            if (portrait != null && !string.IsNullOrEmpty(node.portraitAction))
+                portrait.SetVisible(node.portraitAction == "show");
             if (portrait != null)
             {
                 // The waking backgrounds belong to the protagonist, without the guard.
                 if (node.backgroundId == "BG_08" || node.backgroundId == "BG_09") portrait.HideNarrative();
                 else if (node.speaker == "guard") portrait.ShowSpeakingGuard();
             }
+            if (!string.IsNullOrEmpty(node.bgmId) || !string.IsNullOrEmpty(node.seId))
+            {
+                if (!HasAudioUI)
+                {
+                    Debug.LogError("[SeaOfMemories] Scenario audio needs step 11 audio setup.", this);
+                    StopPlayback();
+                    return;
+                }
+                // ノードへの入場時だけ。文字更新・全文表示・Pause/Resumeでは呼ばない。
+                if (!string.IsNullOrEmpty(node.bgmId)) audioController.CrossFadeBgm(node.bgmId, audioController.BgmFadeSeconds);
+                if (!string.IsNullOrEmpty(node.seId)) audioController.PlaySe(node.seId);
+            }
+            if (node.screenEffectId == "GLASS_SHAKE")
+            {
+                if (!HasPortraitUI)
+                {
+                    Debug.LogError("[SeaOfMemories] GLASS_SHAKE needs the configured portrait view.", this);
+                    StopPlayback();
+                    return;
+                }
+                // 入場時に一度だけ。全文表示や読み返し復帰では再実行しない。
+                if (scenarioFlow == null || !scenarioFlow.PlayGlassShake())
+                    portrait.Shake(portrait.ShakeSeconds, portrait.ShakePixels);
+            }
             speakerText.richText = false;
-            speakerText.text = node.speaker == "guard" ? "GUARD"
-                : node.speaker == "hero" ? (scenarioFlow != null ? scenarioFlow.PlayerName : "YOU") : "";
-            pages.Show(bodyText, node.text, revealOnPresentation);
+            string playerName = scenarioFlow != null ? scenarioFlow.PlayerName : "YOU";
+            bool initialGuard = scenarioFlow != null && (scenarioFlow.Phase == GamePhase.Intro || scenarioFlow.Phase == GamePhase.GuardReturn);
+            speakerText.text = node.speaker == "narration" ? "" : node.speaker == "hero" ? playerName
+                : !string.IsNullOrEmpty(node.speakerName) ? node.speakerName : initialGuard ? "男" : "看守";
+            bodyText.richText = false;
+            pages.Show(bodyText, (node.text ?? "").Replace("｛主人公｝", playerName), revealOnPresentation);
+            if (nodeIndex == 0) SequencePresented?.Invoke(sequence.id);
             if (revealOnPresentation) CaptureBacklog();
             NotifyPresentationReady();
         }
