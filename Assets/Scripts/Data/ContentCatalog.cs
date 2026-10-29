@@ -221,6 +221,24 @@ namespace SeaOfMemories
         public bool ValidateInterrogation()
         {
             if (items == null || items.Length != 6 || repository == null) return Fail("Interrogation catalog is incomplete.");
+            if (repository.HasSequence("QUESTION_SELECTION"))
+            {
+                ScenarioSequence selection = repository.Find("QUESTION_SELECTION");
+                if (selection.nodes.Length != 1 || selection.nodes[0].type != "choice"
+                    || selection.nodes[0].options.Length != 6) return Fail("Expected six authored question options.");
+                var ids = new HashSet<string>();
+                foreach (ChoiceOptionData option in selection.nodes[0].options)
+                {
+                    ItemDefinition item = GetItem(option.id);
+                    if (item == null || !ids.Add(option.id) || option.nextSequenceId != item.QuestionSequenceId
+                        || !repository.HasSequence(item.QuestionSequenceId)) return Fail("Authored question mapping differs from item data.");
+                }
+                foreach (string id in new[] { "INTERROGATION_INTRO", "QUESTION_PROMPT", "QUESTION_MISSING_INFO",
+                    "QUESTION_COMBO_1", "QUESTION_COMBO_2", "QUESTION_COMBO_3", "TRUE_END_ENTRY_CHOICE", "TRUE_END_ENTRY_LINE" })
+                    if (!repository.HasSequence(id)) return Fail("Missing authored question sequence: " + id);
+                return ValidateLines("QUESTION_PROMPT") && ValidateLines("QUESTION_MISSING_INFO")
+                    && ValidateLines("BAD_END") && ValidateLines("TRUE_END");
+            }
             foreach (ItemDefinition item in items)
             {
                 if (item == null || string.IsNullOrWhiteSpace(item.QuestionLabel)

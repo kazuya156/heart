@@ -24,6 +24,15 @@ namespace SeaOfMemories
         [SerializeField] private GuardPortraitView portrait;
         [SerializeField] private AudioController audioController;
         public void ConfigureAudio(AudioController controller) { audioController = controller; }
+        private ScenarioRepository QuestionRepository => GetComponent<ScenarioRepository>();
+        private bool UsesAuthoredQuestions => QuestionRepository != null && QuestionRepository.HasSequence("QUESTION_SELECTION");
+        private string QuestionLabel(ItemDefinition item)
+        {
+            if (UsesAuthoredQuestions)
+                foreach (ChoiceOptionData option in QuestionRepository.Find("QUESTION_SELECTION").nodes[0].options)
+                    if (option.id == item.Id) return option.label;
+            return item.QuestionLabel;
+        }
         private bool statusPanelReady;
         private bool warning;
         private float warningSecondsRemaining = -1f;
@@ -115,7 +124,7 @@ namespace SeaOfMemories
                 RectTransform optionRect = buttons[i].GetComponent<RectTransform>();
                 optionRect.anchorMin = new Vector2(0.64f, optionRect.anchorMin.y);
                 optionRect.anchorMax = new Vector2(0.99f, optionRect.anchorMax.y);
-                labels[i].text = !owned ? "？？？" : item == null ? id : item.QuestionLabel;
+                labels[i].text = !owned ? "？？？" : item == null ? id : QuestionLabel(item);
                 labels[i].color = asked ? new Color(0.5f, 0.5f, 0.5f) : Color.white;
                 icons[i].sprite = owned && item != null ? item.Icon : null;
                 icons[i].enabled = icons[i].sprite != null;
@@ -271,6 +280,28 @@ namespace SeaOfMemories
                 }
                 // 3問目はこの時点で所持品と選択肢を止め、返答終了までEndingに移らない。
                 flow.RefreshQuestionState();
+                if (UsesAuthoredQuestions)
+                {
+                    if (audioController != null) audioController.PlaySe(item.IsValid ? "SE_05" : "SE_06");
+                    if (HasQuestionVisuals)
+                    {
+                        if (item.IsValid)
+                        {
+                            effects.SetComboLevel(result.comboAfter);
+                            portrait.SetExpression(result.comboAfter == 1 ? "GUARD_03" : result.comboAfter == 2 ? "GUARD_04" : "GUARD_05");
+                            portrait.Shake(portrait.ShakeSeconds, portrait.ShakePixels);
+                        }
+                        else { portrait.StopShake(); effects.FadeOutVignette(effects.DummyFadeSeconds); }
+                    }
+                    // A final BadEnd has no next question to urge the player toward.
+                    if (item.IsValid && !(result.isFinalQuestion && result.ending == EndingType.Bad))
+                        dialogue.Play("QUESTION_COMBO_" + result.comboAfter, () =>
+                        {
+                            if (IsCurrent(version, itemId)) OnReplyFinished(result);
+                        });
+                    else OnReplyFinished(result);
+                    return;
+                }
                 if (item.IsValid)
                 {
                     if (audioController != null) audioController.PlaySe("SE_05");

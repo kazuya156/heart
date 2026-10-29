@@ -168,6 +168,8 @@ namespace SeaOfMemories
                 }
         }
 
+        public bool HasSequence(string id) { return !string.IsNullOrEmpty(id) && sequences.ContainsKey(id); }
+
         public ScenarioSequence Find(string sequenceId)
         {
             if (!string.IsNullOrEmpty(sequenceId) && sequences.TryGetValue(sequenceId, out var result))

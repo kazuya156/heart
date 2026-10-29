@@ -685,6 +685,28 @@
         }
       ],
       "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_PROMPT",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "どの手がかりについて聞こうか。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_MISSING_INFO",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "この情報はまだ手に入れていない。"
+        }
+      ],
+      "nextSequenceId": ""
     }
   ]
 }
