@@ -46,11 +46,18 @@ namespace SeaOfMemories
         public bool HasItem(string itemId) { return itemIds.Contains(itemId); }
         public bool HasAsked(string itemId) { return askedIds.Contains(itemId); }
 
+        private string pendingQuestionId = "";
         public QuestionResult TryApplyQuestion(ItemDefinition item)
+        {
+            QuestionResult begun = TryBeginQuestion(item);
+            return begun.status == QuestionStatus.Accepted ? CompleteQuestion(item) : begun;
+        }
+
+        public QuestionResult TryBeginQuestion(ItemDefinition item)
         {
             QuestionStatus status;
             if (item == null || !KnownItemIds.Contains(item.Id) || !HasItem(item.Id)) status = QuestionStatus.NotOwned;
-            else if (HasAsked(item.Id)) status = QuestionStatus.AlreadyAsked;
+            else if (HasAsked(item.Id) || !string.IsNullOrEmpty(pendingQuestionId)) status = QuestionStatus.AlreadyAsked;
             else if (QuestionCount >= 3) status = QuestionStatus.LimitReached;
             else status = QuestionStatus.Accepted;
             if (status != QuestionStatus.Accepted)
@@ -58,6 +65,15 @@ namespace SeaOfMemories
 
             askedIds.Add(item.Id);
             QuestionCount++;
+            pendingQuestionId = item.Id;
+            return new QuestionResult(status, 0, ComboCount, Agitation, QuestionCount, false, EndingType.None);
+        }
+
+        public QuestionResult CompleteQuestion(ItemDefinition item)
+        {
+            if (item == null || pendingQuestionId != item.Id || string.IsNullOrEmpty(pendingQuestionId))
+                return new QuestionResult(QuestionStatus.AlreadyAsked, 0, ComboCount, Agitation, QuestionCount, false, EndingType.None);
+            pendingQuestionId = "";
             int delta = 0;
             if (item.IsValid)
             {
@@ -68,7 +84,7 @@ namespace SeaOfMemories
             else ComboCount = 0; // 累積した動揺度は消さない。
             bool final = QuestionCount == 3;
             EndingType ending = !final ? EndingType.None : Agitation == 100 ? EndingType.True : EndingType.Bad;
-            return new QuestionResult(status, delta, ComboCount, Agitation, QuestionCount, final, ending);
+            return new QuestionResult(QuestionStatus.Accepted, delta, ComboCount, Agitation, QuestionCount, final, ending);
         }
 
         public bool TryAddItem(string itemId)
@@ -82,6 +98,7 @@ namespace SeaOfMemories
 
         public void Reset()
         {
+            pendingQuestionId = "";
             PlayerName = "";
             itemIds.Clear();
             askedIds.Clear();

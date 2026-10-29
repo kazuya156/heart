@@ -237,7 +237,7 @@ namespace SeaOfMemories
                     "QUESTION_COMBO_1", "QUESTION_COMBO_2", "QUESTION_COMBO_3", "TRUE_END_ENTRY_CHOICE", "TRUE_END_ENTRY_LINE" })
                     if (!repository.HasSequence(id)) return Fail("Missing authored question sequence: " + id);
                 return ValidateLines("QUESTION_PROMPT") && ValidateLines("QUESTION_MISSING_INFO")
-                    && ValidateLines("BAD_END") && ValidateLines("TRUE_END");
+                    && repository.HasSequence("BAD_END_START") && repository.HasSequence("TRUE_END_START");
             }
             foreach (ItemDefinition item in items)
             {

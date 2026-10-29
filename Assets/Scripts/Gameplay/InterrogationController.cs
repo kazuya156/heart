@@ -33,6 +33,9 @@ namespace SeaOfMemories
                     if (option.id == item.Id) return option.label;
             return item.QuestionLabel;
         }
+        private bool awaitingAuthoredResult;
+        private QuestionResult authoredResult;
+        private int authoredVersion;
         private bool statusPanelReady;
         private bool warning;
         private float warningSecondsRemaining = -1f;
@@ -85,6 +88,7 @@ namespace SeaOfMemories
         public void ResetView()
         {
             playbackVersion++;
+            awaitingAuthoredResult = false;
             currentItemId = "";
             warning = false;
             warningSecondsRemaining = -1f;
@@ -269,6 +273,33 @@ namespace SeaOfMemories
             if (item == null || !flow.TryStartQuestionPlayback()) return;
             currentItemId = itemId;
             int version = ++playbackVersion;
+            if (UsesAuthoredQuestions)
+            {
+                authoredResult = flow.Session.TryBeginQuestion(item);
+                if (authoredResult.status != QuestionStatus.Accepted) return;
+                authoredVersion = version;
+                awaitingAuthoredResult = true;
+                dialogue.SequencePresented -= OnAuthoredSequencePresented;
+                dialogue.SequencePresented += OnAuthoredSequencePresented;
+                flow.RefreshQuestionState();
+                dialogue.Play(item.QuestionSequenceId, () =>
+                {
+                    if (!IsCurrent(version, itemId)) return;
+                    if (awaitingAuthoredResult)
+                    {
+                        Debug.LogError("[SeaOfMemories] Question completed without its RESULT: " + itemId, this);
+                        return;
+                    }
+                    QuestionResult result = authoredResult;
+                    if (item.IsValid && !(result.isFinalQuestion && result.ending == EndingType.Bad))
+                        dialogue.Play("QUESTION_COMBO_" + result.comboAfter, () =>
+                        {
+                            if (IsCurrent(version, itemId)) OnReplyFinished(result);
+                        });
+                    else OnReplyFinished(result);
+                });
+                return;
+            }
             dialogue.Play(item.QuestionSequenceId, () =>
             {
                 if (!IsCurrent(version, itemId)) return;
@@ -280,28 +311,6 @@ namespace SeaOfMemories
                 }
                 // 3問目はこの時点で所持品と選択肢を止め、返答終了までEndingに移らない。
                 flow.RefreshQuestionState();
-                if (UsesAuthoredQuestions)
-                {
-                    if (audioController != null) audioController.PlaySe(item.IsValid ? "SE_05" : "SE_06");
-                    if (HasQuestionVisuals)
-                    {
-                        if (item.IsValid)
-                        {
-                            effects.SetComboLevel(result.comboAfter);
-                            portrait.SetExpression(result.comboAfter == 1 ? "GUARD_03" : result.comboAfter == 2 ? "GUARD_04" : "GUARD_05");
-                            portrait.Shake(portrait.ShakeSeconds, portrait.ShakePixels);
-                        }
-                        else { portrait.StopShake(); effects.FadeOutVignette(effects.DummyFadeSeconds); }
-                    }
-                    // A final BadEnd has no next question to urge the player toward.
-                    if (item.IsValid && !(result.isFinalQuestion && result.ending == EndingType.Bad))
-                        dialogue.Play("QUESTION_COMBO_" + result.comboAfter, () =>
-                        {
-                            if (IsCurrent(version, itemId)) OnReplyFinished(result);
-                        });
-                    else OnReplyFinished(result);
-                    return;
-                }
                 if (item.IsValid)
                 {
                     if (audioController != null) audioController.PlaySe("SE_05");
@@ -324,6 +333,35 @@ namespace SeaOfMemories
                     PlayReply(item, result, version);
                 }
             });
+        }
+
+        private void OnAuthoredSequencePresented(string sequenceId)
+        {
+            if (!awaitingAuthoredResult || !IsCurrent(authoredVersion, currentItemId)
+                || sequenceId != "QUESTION_" + currentItemId + "_RESULT") return;
+            awaitingAuthoredResult = false;
+            ItemDefinition item = catalog.GetItem(currentItemId);
+            authoredResult = flow.Session.CompleteQuestion(item);
+            if (authoredResult.status != QuestionStatus.Accepted)
+            {
+                Debug.LogError("[SeaOfMemories] Authored result could not be applied.", this);
+                return;
+            }
+            flow.RefreshQuestionState();
+            if (audioController != null) audioController.PlaySe(item.IsValid ? "SE_05" : "SE_06");
+            if (!HasQuestionVisuals) return;
+            if (item.IsValid)
+            {
+                effects.SetComboLevel(authoredResult.comboAfter);
+                portrait.SetExpression(authoredResult.comboAfter == 1 ? "GUARD_03" : authoredResult.comboAfter == 2 ? "GUARD_04" : "GUARD_05");
+                portrait.Shake(portrait.ShakeSeconds, portrait.ShakePixels);
+            }
+            else { portrait.StopShake(); effects.FadeOutVignette(effects.DummyFadeSeconds); }
+        }
+
+        private void OnDestroy()
+        {
+            if (dialogue != null) dialogue.SequencePresented -= OnAuthoredSequencePresented;
         }
 
         private bool IsCurrent(int version, string itemId)

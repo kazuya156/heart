@@ -36,7 +36,7 @@ namespace SeaOfMemories.EditorTools
                 if (item.Icon == null || item.LargeImage == null || item.DescriptionSequenceId != id + "_INSPECT")
                 { Debug.LogError("Item image/description is not connected: " + id); return; }
             }
-            Debug.Log("[SeaOfMemories] V1 data checks passed: 5 files, global IDs/links, new catalog IDs, item validity, local audio and item images. Use the separate Name Entry, Artwork Hotspots and Backlog checks; final ending scripts remain separate work.");
+            Debug.Log("[SeaOfMemories] V1 data checks passed: 5 files, global IDs/links, new catalog IDs, item validity, local audio and item images. Use the separate Name Entry, Artwork Hotspots and Backlog checks; v1.1 ending scripts are connected; verify portrait actions, speaker overrides and audio timing in Play mode.");
         }
     }
 }

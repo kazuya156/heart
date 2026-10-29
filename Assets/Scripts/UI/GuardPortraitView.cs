@@ -16,6 +16,15 @@ namespace SeaOfMemories
         private CellBarsOverlay bars;
         private bool narrativeStage;
         private bool narrativeVisible;
+        private bool explicitVisibility;
+        public void SetVisible(bool visible)
+        {
+            explicitVisibility = true;
+            narrativeVisible = visible;
+            if (!visible && portraitRoot != null) { StopShake(); portraitRoot.gameObject.SetActive(false); }
+            else if (narrativeStage && portraitRoot != null && stageBackground != null)
+                portraitRoot.gameObject.SetActive(visible && stageBackground.CurrentBackgroundId == "BG_04");
+        }
         private Vector2 restPosition;
 
         private RectTransform sceneLayer;
@@ -92,7 +101,7 @@ namespace SeaOfMemories
 
         public void ShowSpeakingGuard()
         {
-            if (narrativeStage && !narrativeVisible) SetExpression("GUARD_02");
+            if (!explicitVisibility && narrativeStage && !narrativeVisible) SetExpression("GUARD_02");
         }
         private float elapsed, duration, amplitude;
         public string CurrentExpression { get; private set; } = "GUARD_02";
@@ -119,12 +128,12 @@ namespace SeaOfMemories
                 return;
             }
             CurrentExpression = id;
-            narrativeVisible = true;
+            if (!explicitVisibility) narrativeVisible = true;
             if (narrativeStage)
             {
                 StopShake();
                 ApplyNarrativeLayout();
-                portraitRoot.gameObject.SetActive(true);
+                portraitRoot.gameObject.SetActive(narrativeVisible);
             }
             Sprite sprite = catalog.GetSprite(id);
             portraitImage.sprite = sprite;
@@ -177,6 +186,7 @@ namespace SeaOfMemories
 
         public void ResetView()
         {
+            explicitVisibility = false;
             StopShake();
             SetExpression("GUARD_02");
             HideNarrative();

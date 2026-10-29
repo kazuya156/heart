@@ -154,7 +154,7 @@ namespace SeaOfMemories
                     Debug.LogError("[SeaOfMemories] Acquisition UI references are incomplete.", this);
                     ready = false;
                 }
-                string[] required = { "PICKUP_REACTION_1", "PICKUP_REACTION_2", "PICKUP_REACTION_3", "PICKUP_REACTION_4",
+                string[] required = { "PICKUP_REACTION_1", "PICKUP_REACTION_2", "PICKUP_REACTION_3",
                     "FURNITURE_EMPTY", "GUARD_RETURN", "INTERROGATION_INTRO" };
                 foreach (string id in required) if (repository.Find(id) == null) ready = false;
                 if (inventory.HasDetailsSetup && !inventory.IsDetailsConfigured)
@@ -391,13 +391,14 @@ namespace SeaOfMemories
             if (session.Phase != GamePhase.ItemChoice || session.ItemIds.Count == 0) return;
             input.SuppressForCurrentFrame();
             SetPhase(GamePhase.PickupReaction);
+            if (session.IsInventoryFull()) { OnAcquisitionFinished(); return; }
             dialogue.Play("PICKUP_REACTION_" + session.ItemIds.Count, OnAcquisitionFinished);
         }
 
         public void OnAcquisitionFinished()
         {
             if (session.Phase != GamePhase.PickupReaction) return;
-            // 4個目は家具完了より必ず優先。専用反応の再生完了後にだけ帰還へ進む。
+            // 4個目は追加の反応を挟まず、家具完了より優先して帰還へ進む。
             if (session.IsInventoryFull()) { StartGuardReturn(); return; }
             exploration.FinishAcquisitionSequence(session.CurrentFurnitureId);
         }
@@ -477,11 +478,13 @@ namespace SeaOfMemories
                 return;
             }
             bool white = ending == EndingType.True;
-            string sequenceId = white ? "TRUE_END" : "BAD_END";
-            if (audioController != null) audioController.CrossFadeBgm(white ? "BGM_04" : "BGM_03", audioController.BgmFadeSeconds);
-            TransitionTo(white ? GamePhase.TrueEnding : GamePhase.BadEnding, sequenceId, null,
-                () => dialogue.Play(sequenceId, EnterTitle), true);
+            string sequenceId = white ? "TRUE_END_START" : "BAD_END_START";
+            input.SuppressForCurrentFrame();
+            SetPhase(white ? GamePhase.TrueEnding : GamePhase.BadEnding);
+            dialogue.Play(sequenceId, EnterTitle);
         }
+
+        public bool PlayGlassShake() { return backgroundView != null && backgroundView.PlayGlassShake(); }
 
         public bool CanAdvanceDialogue()
         {
