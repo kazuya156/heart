@@ -6,12 +6,183 @@
         {
           "type": "line",
           "speaker": "guard",
-          "text": "[PLACEHOLDER INTERROGATION INTRO 1/2] ..."
+          "text": "囚人、俺のいない間に変なことはしていないだろうな？",
+          "backgroundId": "BG_04",
+          "expressionId": "GUARD_02"
         },
         {
           "type": "line",
           "speaker": "hero",
-          "text": "[PLACEHOLDER INTERROGATION INTRO 2/2] ..."
+          "text": "「囚人」...？"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "なぜ自分をそう呼ぶ？この場所と関係があるのか？",
+              "nextSequenceId": "INTERROGATION_INTRO_REPLY_1_A"
+            },
+            {
+              "id": "b",
+              "label": "どういうことです？説明してください！",
+              "nextSequenceId": "INTERROGATION_INTRO_REPLY_1_B"
+            }
+          ]
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "INTERROGATION_INTRO_REPLY_1_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "なぜ自分をそう呼ぶ？この場所と関係があるのか？"
+        }
+      ],
+      "nextSequenceId": "INTERROGATION_INTRO_MIDDLE"
+    },
+    {
+      "id": "INTERROGATION_INTRO_REPLY_1_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "どういうことです？説明してください！"
+        }
+      ],
+      "nextSequenceId": "INTERROGATION_INTRO_MIDDLE"
+    },
+    {
+      "id": "INTERROGATION_INTRO_MIDDLE",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "男の表情は変わらないが、瞳の奥が少しだけ揺れたように見えた。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "...俺はお前の看守だ。",
+          "expressionId": "GUARD_02"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "分かったらもう俺に質問するな、お前は黙ってそこに居ればいいんだ。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "男は自分の看守だと名乗る。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "この不思議な世界で唯一まともに会話ができる相手ならば、集めた手がかりをぶつけてみるのがいいかもしれない。"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "なあ、ちょっと聞きたいんだが。",
+              "nextSequenceId": "INTERROGATION_INTRO_REPLY_2_A"
+            },
+            {
+              "id": "b",
+              "label": "少しいいですか。",
+              "nextSequenceId": "INTERROGATION_INTRO_REPLY_2_B"
+            }
+          ]
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "INTERROGATION_INTRO_REPLY_2_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "なあ、ちょっと聞きたいんだが。"
+        }
+      ],
+      "nextSequenceId": "INTERROGATION_INTRO_END"
+    },
+    {
+      "id": "INTERROGATION_INTRO_REPLY_2_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "少しいいですか。"
+        }
+      ],
+      "nextSequenceId": "INTERROGATION_INTRO_END"
+    },
+    {
+      "id": "INTERROGATION_INTRO_END",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "...黙っていろ。",
+          "expressionId": "GUARD_02"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "看守は聞く耳を持ちそうにない。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "質問をぶつけるしかなさそうだ"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_SELECTION",
+      "nodes": [
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "ITEM_01",
+              "label": "長さが不ぞろいな鉛筆について尋ねる",
+              "nextSequenceId": "QUESTION_ITEM_01"
+            },
+            {
+              "id": "ITEM_02",
+              "label": "ヒーローものの落書きについて尋ねる",
+              "nextSequenceId": "QUESTION_ITEM_02"
+            },
+            {
+              "id": "ITEM_03",
+              "label": "ベッドの上に置かれた子供用の道具について尋ねる",
+              "nextSequenceId": "QUESTION_ITEM_03"
+            },
+            {
+              "id": "ITEM_04",
+              "label": "午前二時を指して止まった目覚まし時計について尋ねる",
+              "nextSequenceId": "QUESTION_ITEM_04"
+            },
+            {
+              "id": "ITEM_05",
+              "label": "窓の向こうに見える水平線について尋ねる",
+              "nextSequenceId": "QUESTION_ITEM_05"
+            },
+            {
+              "id": "ITEM_06",
+              "label": "名前が分からない表彰状について尋ねる",
+              "nextSequenceId": "QUESTION_ITEM_06"
+            }
+          ]
         }
       ],
       "nextSequenceId": ""
@@ -21,19 +192,71 @@
       "nodes": [
         {
           "type": "line",
-          "speaker": "hero",
-          "text": "[PLACEHOLDER QUESTION ITEM_01] What can you tell me about the uneven pencils?"
+          "speaker": "narration",
+          "text": "学習机で見つけた鉛筆について問いただした。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "...ただの鉛筆だろう、何も気にすることはない！"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "一本の鉛筆を最後まで使い切るなら、こんな中途半端に長い鉛筆を作るはずがない。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "逆に複数本使うならこんな不均等にはならないはずだ。"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "人が二人いたんじゃないのか？",
+              "nextSequenceId": "QUESTION_ITEM_01_TONE_A"
+            },
+            {
+              "id": "b",
+              "label": "この牢に二人、人がいたはずです。",
+              "nextSequenceId": "QUESTION_ITEM_01_TONE_B"
+            }
+          ]
         }
       ],
       "nextSequenceId": ""
     },
     {
-      "id": "REPLY_ITEM_01",
+      "id": "QUESTION_ITEM_01_TONE_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "人が二人いたんじゃないのか？"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_01_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_01_TONE_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "この牢に二人、人がいたはずです。"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_01_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_01_RESULT",
       "nodes": [
         {
           "type": "line",
           "speaker": "guard",
-          "text": "[PLACEHOLDER FIXED REPLY ITEM_01] This is the guard response for this information."
+          "text": "ッ！！！"
         }
       ],
       "nextSequenceId": ""
@@ -43,19 +266,71 @@
       "nodes": [
         {
           "type": "line",
-          "speaker": "hero",
-          "text": "[PLACEHOLDER QUESTION ITEM_02] What can you tell me about the scribbled notes?"
+          "speaker": "narration",
+          "text": "学習机で見つけたヒーローものの落書きについて問いただした。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "それがどうした、子どもの落書きだろう。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "落書きを書いた人物がいたはずだ。"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "この牢は自分だけじゃないのか？",
+              "nextSequenceId": "QUESTION_ITEM_02_TONE_A"
+            },
+            {
+              "id": "b",
+              "label": "過去に誰かいたのでは？",
+              "nextSequenceId": "QUESTION_ITEM_02_TONE_B"
+            }
+          ]
         }
       ],
       "nextSequenceId": ""
     },
     {
-      "id": "REPLY_ITEM_02",
+      "id": "QUESTION_ITEM_02_TONE_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "この牢は自分だけじゃないのか？"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_02_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_02_TONE_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "過去に誰かいたのでは？"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_02_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_02_RESULT",
       "nodes": [
         {
           "type": "line",
           "speaker": "guard",
-          "text": "[PLACEHOLDER FIXED REPLY ITEM_02] This is the guard response for this information."
+          "text": "はあ、そんなことを気にしてどうする？"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "今は一人なのだからどうでもいいことだろう。"
         }
       ],
       "nextSequenceId": ""
@@ -65,19 +340,66 @@
       "nodes": [
         {
           "type": "line",
-          "speaker": "hero",
-          "text": "[PLACEHOLDER QUESTION ITEM_03] What can you tell me about the small clothes?"
+          "speaker": "narration",
+          "text": "子供向けの不用品について問いただした。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "それがどうしたというんだ。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "的確な指摘ができれば、看守がボロを出すかもしれない。"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "使わなくなったという感じがしない。",
+              "nextSequenceId": "QUESTION_ITEM_03_TONE_A"
+            },
+            {
+              "id": "b",
+              "label": "おさがりだったのでは？",
+              "nextSequenceId": "QUESTION_ITEM_03_TONE_B"
+            }
+          ]
         }
       ],
       "nextSequenceId": ""
     },
     {
-      "id": "REPLY_ITEM_03",
+      "id": "QUESTION_ITEM_03_TONE_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "使わなくなったという感じがしない。"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_03_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_03_TONE_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "おさがりだったのでは？"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_03_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_03_RESULT",
       "nodes": [
         {
           "type": "line",
           "speaker": "guard",
-          "text": "[PLACEHOLDER FIXED REPLY ITEM_03] This is the guard response for this information."
+          "text": "ッ！！！"
         }
       ],
       "nextSequenceId": ""
@@ -87,19 +409,66 @@
       "nodes": [
         {
           "type": "line",
-          "speaker": "hero",
-          "text": "[PLACEHOLDER QUESTION ITEM_04] What can you tell me about the 2 AM alarm?"
+          "speaker": "narration",
+          "text": "午前二時を指して止まった目覚まし時計について問いただした。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "ただの時計だろう。それがどうした？"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "目覚まし時計を使っていた人物がいたはずだ。"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "誰が使っていたんだ？",
+              "nextSequenceId": "QUESTION_ITEM_04_TONE_A"
+            },
+            {
+              "id": "b",
+              "label": "時計が止まっているでしょう。過去に誰かいたのでは？",
+              "nextSequenceId": "QUESTION_ITEM_04_TONE_B"
+            }
+          ]
         }
       ],
       "nextSequenceId": ""
     },
     {
-      "id": "REPLY_ITEM_04",
+      "id": "QUESTION_ITEM_04_TONE_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "誰が使っていたんだ？"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_04_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_04_TONE_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "時計が止まっているでしょう。過去に誰かいたのでは？"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_04_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_04_RESULT",
       "nodes": [
         {
           "type": "line",
           "speaker": "guard",
-          "text": "[PLACEHOLDER FIXED REPLY ITEM_04] This is the guard response for this information."
+          "text": "お前以外の誰かだろう。それを気にする必要がどこにある？"
         }
       ],
       "nextSequenceId": ""
@@ -109,19 +478,66 @@
       "nodes": [
         {
           "type": "line",
-          "speaker": "hero",
-          "text": "[PLACEHOLDER QUESTION ITEM_05] What can you tell me about the horizon?"
+          "speaker": "narration",
+          "text": "窓の向こうに見える水平線について問いただした。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "どうせ出られないのだから外の世界を気にしてどうする。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "この牢獄に関わる話が聞けるかもしれない。"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "陸地が見えないのはなぜだ？",
+              "nextSequenceId": "QUESTION_ITEM_05_TONE_A"
+            },
+            {
+              "id": "b",
+              "label": "この牢獄は島にある？",
+              "nextSequenceId": "QUESTION_ITEM_05_TONE_B"
+            }
+          ]
         }
       ],
       "nextSequenceId": ""
     },
     {
-      "id": "REPLY_ITEM_05",
+      "id": "QUESTION_ITEM_05_TONE_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "陸地が見えないのはなぜだ？"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_05_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_05_TONE_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "この牢獄は島にある？"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_05_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_05_RESULT",
       "nodes": [
         {
           "type": "line",
           "speaker": "guard",
-          "text": "[PLACEHOLDER FIXED REPLY ITEM_05] This is the guard response for this information."
+          "text": "関係ないと言っているだろう。黙って口を閉じろ。"
         }
       ],
       "nextSequenceId": ""
@@ -131,52 +547,141 @@
       "nodes": [
         {
           "type": "line",
-          "speaker": "hero",
-          "text": "[PLACEHOLDER QUESTION ITEM_06] What can you tell me about the certificate?"
+          "speaker": "narration",
+          "text": "名前が分からない表彰状について問いただした。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "何が言いたい？たかが表彰状だろう。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "的確な指摘ができれば、看守がボロを出すかもしれない。"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "塗りつぶされた名前に見覚えがある気がする。",
+              "nextSequenceId": "QUESTION_ITEM_06_TONE_A"
+            },
+            {
+              "id": "b",
+              "label": "なぜ丁寧に飾って置いているのです？",
+              "nextSequenceId": "QUESTION_ITEM_06_TONE_B"
+            }
+          ]
         }
       ],
       "nextSequenceId": ""
     },
     {
-      "id": "REPLY_ITEM_06",
+      "id": "QUESTION_ITEM_06_TONE_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "塗りつぶされた名前に見覚えがある気がする。"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_06_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_06_TONE_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "なぜ丁寧に飾って置いているのです？"
+        }
+      ],
+      "nextSequenceId": "QUESTION_ITEM_06_RESULT"
+    },
+    {
+      "id": "QUESTION_ITEM_06_RESULT",
       "nodes": [
         {
           "type": "line",
           "speaker": "guard",
-          "text": "[PLACEHOLDER FIXED REPLY ITEM_06] This is the guard response for this information."
+          "text": "ッ！！！"
         }
       ],
       "nextSequenceId": ""
     },
     {
-      "id": "QUESTION_PROMPT",
+      "id": "QUESTION_COMBO_1",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "看守が焦っているようだ。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "続けて畳みかけよう。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_COMBO_2",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "動揺が強く表れている。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "もう一押し揺さぶりをかけてみよう。"
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "QUESTION_COMBO_3",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "もはや看守は動揺をまったく隠せていない。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "最後の一押しだ。"
+        }
+      ],
+      "nextSequenceId": "TRUE_END_ENTRY_CHOICE"
+    },
+    {
+      "id": "TRUE_END_ENTRY_CHOICE",
+      "nodes": [
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "話してくれないか。",
+              "nextSequenceId": "TRUE_END_ENTRY_LINE"
+            }
+          ]
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "TRUE_END_ENTRY_LINE",
       "nodes": [
         {
           "type": "line",
           "speaker": "hero",
-          "text": "[PLACEHOLDER THOUGHT] Which information should I ask about?"
-        }
-      ],
-      "nextSequenceId": ""
-    },
-    {
-      "id": "QUESTION_MISSING_INFO",
-      "nodes": [
-        {
-          "type": "line",
-          "speaker": "hero",
-          "text": "必要な情報を持っていない"
-        }
-      ],
-      "nextSequenceId": ""
-    },
-    {
-      "id": "QUESTION_VALID_REACTION",
-      "nodes": [
-        {
-          "type": "line",
-          "speaker": "guard",
-          "text": "ッ！"
+          "text": "話してくれないか。"
         }
       ],
       "nextSequenceId": ""
