@@ -1,19 +1,308 @@
 {
   "sequences": [
     {
-      "id": "TRUE_END",
+      "id": "TRUE_END_START",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "「話してくれないか」だと...？",
+          "backgroundId": "BG_04",
+          "expressionId": "GUARD_06",
+          "speakerName": "看守",
+          "portraitAction": "show"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "看守はわなわなと震えながら、怒りに満ちたまなざしを向けている。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "ふざけるな！",
+          "expressionId": "GUARD_05",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "俺がどんな思いをしているかも知らないくせに！",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "お前は俺が守ってやらないとまともに生きていけないんだ！",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "自分は何から守られている？"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "あーもう、分かったよ！教えてやればいいんだろう！？",
+          "expressionId": "GUARD_05",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "”いつも”こうだ。お前は好き勝手して、最後は必ず逃げる。",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "真実が知りたいなら、黙って振り向け！",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "看守の言う通りに、黙って振り返る。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "出口の鉄柵からは部屋全体が良く見える。",
+          "backgroundId": "BG_03",
+          "portraitAction": "hide"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "お前は「鉛筆」だの、「不用品」だの、「表彰状」だの言ってきたが...。",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "そんな遠回しじゃなくても見えるだろうが。",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "遠回しじゃない、もっと直接的なこと...。"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "...学習机が二つある？",
+              "nextSequenceId": "TRUE_END_ROOM_CLUE_A"
+            },
+            {
+              "id": "b",
+              "label": "2 段ベッドがある...？",
+              "nextSequenceId": "TRUE_END_ROOM_CLUE_B"
+            }
+          ]
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "TRUE_END_ROOM_CLUE_A",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "...学習机が二つある？"
+        }
+      ],
+      "nextSequenceId": "TRUE_END_AFTER_CLUE"
+    },
+    {
+      "id": "TRUE_END_ROOM_CLUE_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "2 段ベッドがある...？"
+        }
+      ],
+      "nextSequenceId": "TRUE_END_AFTER_CLUE"
+    },
+    {
+      "id": "TRUE_END_AFTER_CLUE",
       "nodes": [
         {
           "type": "line",
           "speaker": "narration",
-          "text": "[PLACEHOLDER TRUE END] The three valid questions uncovered the truth.",
+          "text": "振り返って看守に問いかけると、どこか諦めたような顔をしている。",
+          "backgroundId": "BG_04",
+          "expressionId": "GUARD_02",
+          "portraitAction": "show"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "そうだ。",
+          "bgmId": "BGM_04",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "それらは”初めから”あったのに、お前はそれ以外で誰かの存在を俺に問い続けた。",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "看守の言う通り、確かに机やベッドは最初からあった。"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "どうして気づかなかったんだろう...。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "お前は気づかなかったんじゃない。",
+          "expressionId": "GUARD_02",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "”見ようとしなかった”んだ。",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "看守の意味深な言葉に背筋が凍りつくのを感じた。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "全て思い出してしまったから。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "ここはお前の心の海に浮かぶ、孤島の牢獄。そして囚われているのはー",
+          "expressionId": "GUARD_02",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "お前ではなく、俺だ。",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "そうだ...。あの子の手を離した日からずっと、もう一人の自分にその事実を押し付け心の底に沈めてきた。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "珍しいな。いつもは真実に近づいたらすぐいなくなるくせに。",
+          "expressionId": "GUARD_02",
+          "speakerName": "自分"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "もう、逃げない。",
+              "nextSequenceId": "TRUE_END_RESOLVE_LINE"
+            }
+          ]
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "TRUE_END_RESOLVE_LINE",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "もう、逃げない。"
+        }
+      ],
+      "nextSequenceId": "TRUE_END_UNLOCK"
+    },
+    {
+      "id": "TRUE_END_UNLOCK",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "鉄柵の鍵が解かれる音が響く。",
           "seId": "SE_09"
         },
         {
           "type": "line",
           "speaker": "narration",
-          "text": "[PLACEHOLDER] The final text ends here. Advance to return to the title.",
-          "backgroundId": "BG_08"
+          "text": "もう一人の自分は目を見開き、柵の向こうからこちらを見ていた。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "お前...。",
+          "expressionId": "GUARD_06",
+          "speakerName": "自分"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "二度と忘れないから。",
+          "seId": "SE_10"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "振り向くことなく、柵の奥へ広がる霧の中へと足を踏み入れる。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "あたりを包む闇にほんの少しだけ心地よさを感じながら、はるか遠くに望む一筋の光へと歩みを進めた。"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "...ハッ！！！",
+          "backgroundId": "BG_08",
+          "portraitAction": "hide"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "眩い光に目を覚ます。カーテンを閉めていなかったらしい。"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "アラーム...。ああ、今日は日曜日か。"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "バイトもないし、二度寝しようかな...。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "欠伸をする視界の隅で微かに、しかし確かに、大切な写真が輝いて見えた気がした。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "TrueEnd「おわり」"
         }
       ],
       "nextSequenceId": ""

@@ -1,20 +1,138 @@
 {
   "sequences": [
     {
-      "id": "BAD_END",
+      "id": "BAD_END_START",
       "nodes": [
         {
           "type": "line",
-          "speaker": "narration",
-          "text": "[PLACEHOLDER BAD END] The three questions did not uncover the truth.",
-          "seId": "SE_07"
+          "speaker": "guard",
+          "text": "いい加減にしろ！こんなやり取り、何の意味もない！",
+          "backgroundId": "BG_04",
+          "expressionId": "GUARD_05",
+          "speakerName": "看守",
+          "portraitAction": "show"
         },
         {
           "type": "line",
           "speaker": "narration",
-          "text": "[PLACEHOLDER] The final text ends here. Advance to return to the title.",
+          "text": "看守は激昂し、質問攻めを制止させた。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "何にも知らないまま、”いつも”俺に嫌がらせして行くんだろう！？もううんざりだ！",
+          "expressionId": "GUARD_05",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "”いつも”...？"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "問いかけようとしたその瞬間ー"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "ガシャン！",
+          "seId": "SE_07",
+          "screenEffectId": "GLASS_SHAKE"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "部屋にあった窓が割れ、ガラスが飛散した。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "...時間だとよ。さっさと行けよ。",
+          "expressionId": "GUARD_02",
+          "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "看守の言葉に、明確な疑問を抱いているはずなのに、窓の向こうに見える海面から目が離せない。"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "...行かなきゃ。"
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "id": "a",
+              "label": "「窓から海に飛び込む」",
+              "nextSequenceId": "BAD_END_DIVE"
+            }
+          ]
+        }
+      ],
+      "nextSequenceId": ""
+    },
+    {
+      "id": "BAD_END_DIVE",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "体が海面に叩きつけられる。不思議と痛くはなかった。",
           "seId": "SE_08",
+          "backgroundId": "BG_02",
+          "bgmId": "BGM_03",
+          "portraitAction": "hide"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "むしろ、海水に包まれる感覚に安堵すらした。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "海の底へ向かって沈んでいき、海面に見える光が遠のいていく。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "そのたびに、看守の告げた不可解な言葉を忘れていく感じがした。"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "...ハッ！！！",
           "backgroundId": "BG_09"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "暗い部屋で一人目を覚ます。まだ深夜くらいだろうか。"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "うわ...寝汗がすごいな。悪夢でも見たか？"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "寝巻、着替えたほうがいいな。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "ベッドから降りて、新しい寝巻を取り出す。汗に冷やされて少し肌寒かった。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "BadEnd「はじまり」"
         }
       ],
       "nextSequenceId": ""
