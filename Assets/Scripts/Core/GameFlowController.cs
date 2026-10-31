@@ -210,8 +210,6 @@ namespace SeaOfMemories
                 Debug.LogError("[SeaOfMemories] Scenario backgrounds need the background view and catalog.", this);
                 ready = false;
             }
-            ConfigureEndingHeading(badEndingPanel, "BAD END");
-            ConfigureEndingHeading(trueEndingPanel, "TRUE END");
             dialogue.ConfigureScenarioFades(this);
             Canvas canvas = titlePanel.GetComponentInParent<Canvas>();
             if (canvas != null)
@@ -477,9 +475,21 @@ namespace SeaOfMemories
                 Debug.LogError("[SeaOfMemories] Ending does not match the accepted question results.", this);
                 return;
             }
+            
             bool white = ending == EndingType.True;
             string sequenceId = white ? "TRUE_END_START" : "BAD_END_START";
+
             input.SuppressForCurrentFrame();
+
+            // 質問パート終了時に緊迫BGMを終了し、さざ波へ戻す
+            if (audioController != null)
+            {
+                audioController.CrossFadeBgm(
+                    "BGM_05",
+                    audioController.BgmFadeSeconds
+                );
+            }
+
             SetPhase(white ? GamePhase.TrueEnding : GamePhase.BadEnding);
             dialogue.Play(sequenceId, EnterTitle);
         }
@@ -656,10 +666,15 @@ namespace SeaOfMemories
             if (closeupPanel != null) closeupPanel.SetActive(phase == GamePhase.FurnitureDescription || phase == GamePhase.Closeup || phase == GamePhase.Inspecting
                 || phase == GamePhase.ItemChoice || phase == GamePhase.PickupReaction);
             if (inspectionPanel != null) inspectionPanel.SetActive(phase == GamePhase.Inspecting || phase == GamePhase.ItemChoice);
-            if (questionPanel != null) questionPanel.SetActive(phase == GamePhase.InterrogationIntro
-                || phase == GamePhase.QuestionSelection || phase == GamePhase.QuestionPlayback);
-            if (badEndingPanel != null) badEndingPanel.SetActive(phase == GamePhase.BadEnding && backgroundView != null && backgroundView.CurrentBackgroundId == "BG_09");
-            if (trueEndingPanel != null) trueEndingPanel.SetActive(phase == GamePhase.TrueEnding && backgroundView != null && backgroundView.CurrentBackgroundId == "BG_08");
+            if (questionPanel != null)
+            {
+                questionPanel.SetActive(
+                    phase == GamePhase.QuestionSelection ||
+                    phase == GamePhase.QuestionPlayback
+                );
+            }
+            if (badEndingPanel != null) badEndingPanel.SetActive(false);
+            if (trueEndingPanel != null) trueEndingPanel.SetActive(false);
             if (introNote != null) introNote.SetActive(false);
             // ポップアップの暗幕が台詞欄を塞がないよう、台詞欄を手前へ置く。
             if (dialoguePanel.activeSelf) dialoguePanel.transform.SetAsLastSibling();

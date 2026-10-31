@@ -165,7 +165,7 @@ namespace SeaOfMemories
             if (flow.IsInventoryFull() || (catalog != null && IsFurnitureComplete(found.Id))
                 || !flow.TryEnterCloseup(found.Id)) return;
             navigationFrame = Time.frameCount;
-            PlayNavigationSound();
+            // PlayNavigationSound(); は削除
         }
 
         private void PlayNavigationSound()
@@ -381,7 +381,7 @@ namespace SeaOfMemories
             if (flow == null || !flow.CanInteractWithWorld() || flow.Phase != GamePhase.Closeup
                 || navigationFrame == Time.frameCount) return;
             navigationFrame = Time.frameCount;
-            PlayNavigationSound();
+            // PlayNavigationSound(); は削除
             flow.StartExploration();
         }
     }
