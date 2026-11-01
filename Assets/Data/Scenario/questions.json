@@ -8,7 +8,9 @@
           "speaker": "guard",
           "text": "囚人、俺のいない間に変なことはしていないだろうな？",
           "backgroundId": "BG_04",
-          "expressionId": "GUARD_02"
+          "expressionId": "GUARD_02",
+          "portraitAction": "show",
+          "stopSe": true
         },
         {
           "type": "line",
@@ -179,7 +181,7 @@
             },
             {
               "id": "ITEM_03",
-              "label": "ベッドの上に置かれた子供用の道具について尋ねる",
+              "label": "ベッドの上に散らばった子供用の道具について尋ねる",
               "nextSequenceId": "QUESTION_ITEM_03"
             },
             {
@@ -356,7 +358,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "子供向けの不用品について問いただした。"
+          "text": "子供向けの道具について問いただした。"
         },
         {
           "type": "line",
@@ -585,7 +587,7 @@
             },
             {
               "id": "b",
-              "label": "なぜ丁寧に飾って置いている？",
+              "label": "なぜ丁寧に飾っておいている？",
               "nextSequenceId": "QUESTION_ITEM_06_TONE_B"
             }
           ]

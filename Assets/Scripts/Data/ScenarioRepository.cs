@@ -30,6 +30,7 @@ namespace SeaOfMemories
         public string backgroundId;
         public string seId;
         public string bgmId;
+        public bool stopSe;
         public string screenEffectId;
         public ChoiceOptionData[] options;
     }

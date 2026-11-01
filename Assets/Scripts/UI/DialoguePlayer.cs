@@ -224,6 +224,10 @@ namespace SeaOfMemories
                 if (node.backgroundId == "BG_08" || node.backgroundId == "BG_09") portrait.HideNarrative();
                 else if (node.speaker == "guard") portrait.ShowSpeakingGuard();
             }
+            if (node.stopSe && audioController != null)
+            {
+                audioController.StopSe();
+            }
             if (!string.IsNullOrEmpty(node.bgmId) || !string.IsNullOrEmpty(node.seId))
             {
                 if (!HasAudioUI)

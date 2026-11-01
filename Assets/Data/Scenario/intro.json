@@ -34,7 +34,8 @@
           "type": "line",
           "speaker": "guard",
           "text": "目が覚めたようだな。",
-          "expressionId": "GUARD_01"
+          "expressionId": "GUARD_01",
+          "stopSe": true
         },
         {
           "type": "line",
@@ -180,12 +181,15 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "男はそう告げると、焦った様子で奥の方へと消えていった。"
+          "text": "男はそう告げると、焦った様子で奥の方へと消えていった。",
+          "portraitAction": "hide",
+          "seId": "SE_02"
         },
         {
           "type": "line",
           "speaker": "hero",
-          "text": "何が何だか分からないが、何故だかここに居てはいけないような気がする。"
+          "text": "何が何だか分からないが、何故だかここに居てはいけないような気がする。",
+          "stopSe": true
         },
         {
           "type": "line",

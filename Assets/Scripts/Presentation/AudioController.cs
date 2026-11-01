@@ -155,6 +155,12 @@ namespace SeaOfMemories
             SePlayCount++;
         }
 
+        public void StopSe()
+        {
+            if (seSource != null)
+                seSource.Stop();
+        }
+
         public void StopAll()
         {
             StopBgm();
