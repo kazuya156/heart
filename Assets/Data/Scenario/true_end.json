@@ -32,6 +32,11 @@
         },
         {
           "type": "line",
+          "speaker": "narration",
+          "text": "看守はひどく激昂している。"
+        },
+        {
+          "type": "line",
           "speaker": "guard",
           "text": "お前は俺が守ってやらないとまともに生きていけないんだ！",
           "speakerName": "看守"
@@ -39,19 +44,29 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "自分は何から守られている？"
+          "text": "...守られている？"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "...いったい何から？"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "こちらの疑問も届かないくらいに、看守は頭を抱え悶えている。"
         },
         {
           "type": "line",
           "speaker": "guard",
-          "text": "あーもう、分かったよ！教えてやればいいんだろう！？",
+          "text": "あーもう、分かったよ！いい加減うんざりだ！",
           "expressionId": "GUARD_05",
           "speakerName": "看守"
         },
         {
           "type": "line",
           "speaker": "guard",
-          "text": "”いつも”こうだ。お前は好き勝手して、最後は必ず逃げる。",
+          "text": "「いつも」こうだ。お前は好き勝手して、最後は必ず逃げる。",
           "speakerName": "看守"
         },
         {
@@ -63,31 +78,31 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "看守の言う通りに、黙って振り返る。"
+          "text": "看守の言う通りに、黙って振り返ってみる。"
         },
         {
           "type": "line",
           "speaker": "narration",
-          "text": "出口の鉄柵からは部屋全体が良く見える。",
+          "text": "鉄柵からは部屋全体が良く見える。",
           "backgroundId": "BG_03",
           "portraitAction": "hide"
         },
         {
           "type": "line",
           "speaker": "guard",
-          "text": "お前は「鉛筆」だの、「不用品」だの、「表彰状」だの言ってきたが...。",
+          "text": "お前は「鉛筆」だの、「不用品」だの、「表彰状」だのと言ってきたが...",
           "speakerName": "看守"
         },
         {
           "type": "line",
           "speaker": "guard",
-          "text": "そんな遠回しじゃなくても見えるだろうが。",
+          "text": "そんな遠回しじゃなくても見えるだろうが。その眼でよく見やがれ！",
           "speakerName": "看守"
         },
         {
           "type": "line",
           "speaker": "narration",
-          "text": "遠回しじゃない、もっと直接的なこと...。"
+          "text": "遠回しじゃない、もっと直接的なこと..."
         },
         {
           "type": "choice",
@@ -135,7 +150,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "振り返って看守に問いかけると、どこか諦めたような顔をしている。",
+          "text": "振り返って問いかけると、看守はどこか諦めたような顔をしている。",
           "backgroundId": "BG_04",
           "expressionId": "GUARD_02",
           "portraitAction": "show"
@@ -150,7 +165,7 @@
         {
           "type": "line",
           "speaker": "guard",
-          "text": "それらは”初めから”あったのに、お前はそれ以外で誰かの存在を俺に問い続けた。",
+          "text": "それらは「初めから」あったのに、お前はそれ以外で誰かの存在を俺に問い続けた。",
           "speakerName": "看守"
         },
         {
@@ -160,8 +175,13 @@
         },
         {
           "type": "line",
+          "speaker": "narration",
+          "text": "なのに、それについて問いかけようとは少しも思わなかった。"
+        },
+        {
+          "type": "line",
           "speaker": "hero",
-          "text": "どうして気づかなかったんだろう...。"
+          "text": "どうして気づかなかったんだろう..."
         },
         {
           "type": "line",
@@ -173,8 +193,13 @@
         {
           "type": "line",
           "speaker": "guard",
-          "text": "”見ようとしなかった”んだ。",
+          "text": "「見ようとしなかった」んだ。",
           "speakerName": "看守"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "...「見ようとしなかった」？"
         },
         {
           "type": "line",
@@ -184,7 +209,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "全て思い出してしまったから。"
+          "text": "「見ようとしなかった」現実を、思い出してしまったから。"
         },
         {
           "type": "line",
@@ -202,14 +227,70 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "そうだ...。あの子の手を離した日からずっと、もう一人の自分にその事実を押し付け心の底に沈めてきた。"
+          "text": "ああ...そうか。そうだった。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "現実を見れなくなった自分は、記憶を心の奥底に沈めた。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "...自分の人格、「もう一人の自分」と共に。"
         },
         {
           "type": "line",
           "speaker": "guard",
-          "text": "珍しいな。いつもは真実に近づいたらすぐいなくなるくせに。",
+          "text": "俺はお前だ。だから、思い出させないようにしていた。",
           "expressionId": "GUARD_02",
-          "speakerName": "自分"
+          "speakerName": "もう一人の自分"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "そうだ...。あの子の手を離した日からずっと、もう一人の自分にその現実を押し付け心の底に沈めてきた。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "もう何年も前なのに、今でも顔が浮かぶ。",
+          "expressionId": "GUARD_02",
+          "speakerName": "もう一人の自分"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "自分には鮮明に浮かばないその顔を、もう一人の自分は懐かしそうに思い浮かべている。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "...もういいだろ、さっさと行けよ。",
+          "expressionId": "GUARD_02",
+          "speakerName": "もう一人の自分"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "俺がここにいれば、お前はまた理想に戻れる。",
+          "expressionId": "GUARD_02",
+          "speakerName": "もう一人の自分"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "もう一人の自分は俯き、顔を伏せている。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "このままでいれば、つらい現実に向き合わなくて済むのだろう。"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "それでも..."
         },
         {
           "type": "choice",
@@ -247,14 +328,14 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "もう一人の自分は目を見開き、柵の向こうからこちらを見ていた。"
+          "text": "もう一人の自分は目を見開き、柵の向こうからこちらを見ている。"
         },
         {
           "type": "line",
           "speaker": "guard",
           "text": "お前...。",
           "expressionId": "GUARD_06",
-          "speakerName": "自分"
+          "speakerName": "もう一人の自分"
         },
         {
           "type": "line",
@@ -265,7 +346,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "振り向くことなく、柵の奥へ広がる霧の中へと足を踏み入れる。"
+          "text": "振り向くことなく、柵の奥に向かって激流のようにうねる霧の中へと足を踏み入れる。"
         },
         {
           "type": "line",
@@ -297,12 +378,12 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "欠伸をする視界の隅で微かに、しかし確かに、大切な写真が輝いて見えた気がした。"
+          "text": "欠伸をする視界の隅で微かに、しかし確かに、大切な記憶の断片が輝いて見えた気がした。"
         },
         {
           "type": "line",
           "speaker": "narration",
-          "text": "TrueEnd「おわり」"
+          "text": "End「おわり」"
         }
       ],
       "nextSequenceId": ""

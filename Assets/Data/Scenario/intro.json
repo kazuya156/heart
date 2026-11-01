@@ -11,13 +11,23 @@
         },
         {
           "type": "line",
-          "speaker": "narration",
-          "text": "...海の近くには住んでいないはずなのに。"
+          "speaker": "hero",
+          "text": "波の音...？ここはいったい...？"
         },
         {
           "type": "line",
           "speaker": "narration",
-          "text": "誰かが近づいてくる...？",
+          "text": "海の近くには住んでいないはずだが..."
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "...何してたんだっけ"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "朦朧とする意識のまま体を起こすと、どこからか足音が聞こえる。",
           "seId": "SE_02"
         },
         {
@@ -29,7 +39,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "声のする方を向くと、重々しい鉄柵の向こうに人影が見えた。",
+          "text": "声のする方を向くと、重々しい鉄柵の奥に男の人影が見えた。",
           "backgroundId": "BG_04"
         },
         {
@@ -42,7 +52,7 @@
             },
             {
               "id": "b",
-              "label": "...どちら様ですか。",
+              "label": "まだ完全には覚めてない。",
               "nextSequenceId": "INTRO_REPLY_1_B"
             }
           ]
@@ -57,24 +67,7 @@
           "type": "line",
           "speaker": "hero",
           "text": "あんた、誰だよ。"
-        }
-      ],
-      "nextSequenceId": "INTRO_AFTER_REPLY_1"
-    },
-    {
-      "id": "INTRO_REPLY_1_B",
-      "nodes": [
-        {
-          "type": "line",
-          "speaker": "hero",
-          "text": "...どちら様ですか。"
-        }
-      ],
-      "nextSequenceId": "INTRO_AFTER_REPLY_1"
-    },
-    {
-      "id": "INTRO_AFTER_REPLY_1",
-      "nodes": [
+        },
         {
           "type": "line",
           "speaker": "narration",
@@ -85,7 +78,41 @@
           "speaker": "guard",
           "text": "お前が知る必要はない。",
           "expressionId": "GUARD_02"
+        }
+      ],
+      "nextSequenceId": "INTRO_AFTER_REPLY_1"
+    },
+    {
+      "id": "INTRO_REPLY_1_B",
+      "nodes": [
+        {
+          "type": "line",
+          "speaker": "hero",
+          "text": "まだ完全には覚めてない。"
         },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "男は冷ややかな目で｛主人公｝を見ている。"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "...フン、どうだかな。",
+          "expressionId": "GUARD_02"
+        },
+        {
+          "type": "line",
+          "speaker": "guard",
+          "text": "まあ、そのまま動かずにいろ。",
+          "expressionId": "GUARD_02"
+        }
+      ],
+      "nextSequenceId": "INTRO_AFTER_REPLY_1"
+    },
+    {
+      "id": "INTRO_AFTER_REPLY_1",
+      "nodes": [
         {
           "type": "line",
           "speaker": "guard",
@@ -101,7 +128,7 @@
             },
             {
               "id": "b",
-              "label": "何が言いたいんですか。",
+              "label": "何が言いたい。",
               "nextSequenceId": "INTRO_REPLY_2_B"
             }
           ]
@@ -126,7 +153,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "何が言いたいんですか。"
+          "text": "何が言いたい。"
         }
       ],
       "nextSequenceId": "INTRO_END"
@@ -158,7 +185,17 @@
         {
           "type": "line",
           "speaker": "hero",
+          "text": "何が何だか分からないが、何故だかここに居てはいけないような気がする。"
+        },
+        {
+          "type": "line",
+          "speaker": "hero",
           "text": "ここから出ないと...。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "はっきりしてきた意識の中に、確かな目的が芽生えるのを感じる。"
         },
         {
           "type": "line",

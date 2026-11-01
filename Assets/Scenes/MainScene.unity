@@ -9096,11 +9096,11 @@ MonoBehaviour:
   - id: BGM_05
     clip: {fileID: 8300000, guid: b36ba25c43547f94c8dccff78f393424, type: 3}
   - id: SE_01
-    clip: {fileID: 8300000, guid: 187712dc1c670114fb99ec2de8b0ba5d, type: 3}
+    clip: {fileID: 8300000, guid: 95378c3f42729b54c9b2e7eeb8164f85, type: 3}
   - id: SE_02
     clip: {fileID: 8300000, guid: 97b64f9b14487e1449bd29e30db4ed73, type: 3}
   - id: SE_03
-    clip: {fileID: 8300000, guid: 95378c3f42729b54c9b2e7eeb8164f85, type: 3}
+    clip: {fileID: 8300000, guid: 187712dc1c670114fb99ec2de8b0ba5d, type: 3}
   - id: SE_05
     clip: {fileID: 8300000, guid: c44a1e89d52412f439e0e3b8e925c8a0, type: 3}
   - id: SE_06

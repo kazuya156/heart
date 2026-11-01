@@ -20,12 +20,12 @@
           "options": [
             {
               "id": "a",
-              "label": "なぜ自分をそう呼ぶ？この場所と関係があるのか？",
+              "label": "なぜ自分をそう呼ぶ？",
               "nextSequenceId": "INTERROGATION_INTRO_REPLY_1_A"
             },
             {
               "id": "b",
-              "label": "どういうことです？説明してください！",
+              "label": "それ...この場所と関係があるのか？",
               "nextSequenceId": "INTERROGATION_INTRO_REPLY_1_B"
             }
           ]
@@ -39,7 +39,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "なぜ自分をそう呼ぶ？この場所と関係があるのか？"
+          "text": "なぜ自分をそう呼ぶ？"
         }
       ],
       "nextSequenceId": "INTERROGATION_INTRO_MIDDLE"
@@ -50,7 +50,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "どういうことです？説明してください！"
+          "text": "それ...この場所と関係があるのか？"
         }
       ],
       "nextSequenceId": "INTERROGATION_INTRO_MIDDLE"
@@ -61,7 +61,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "男の表情は変わらないが、瞳の奥が少しだけ揺れたように見えた。"
+          "text": "男の表情は変わらないが、その瞳が少しだけ揺れたように見えた。"
         },
         {
           "type": "line",
@@ -71,8 +71,8 @@
         },
         {
           "type": "line",
-          "speaker": "guard",
-          "text": "分かったらもう俺に質問するな、お前は黙ってそこに居ればいいんだ。"
+          "speaker": "hero",
+          "text": "看守...。"
         },
         {
           "type": "line",
@@ -81,8 +81,18 @@
         },
         {
           "type": "line",
+          "speaker": "guard",
+          "text": "分かったらもう俺に質問するな、お前は黙ってそこに居ればいいんだ。"
+        },
+        {
+          "type": "line",
           "speaker": "narration",
-          "text": "この不思議な世界で唯一まともに会話ができる相手ならば、集めた手がかりをぶつけてみるのがいいかもしれない。"
+          "text": "看守は不機嫌そうに眉をしかめている。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "しかし、この不思議な世界で唯一まともに会話ができる相手ならば、集めた手がかりについて聞くのがいいかもしれない。"
         },
         {
           "type": "choice",
@@ -94,7 +104,7 @@
             },
             {
               "id": "b",
-              "label": "少しいいですか。",
+              "label": "お互い暇だろ？ちょっと話そう。",
               "nextSequenceId": "INTERROGATION_INTRO_REPLY_2_B"
             }
           ]
@@ -119,7 +129,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "少しいいですか。"
+          "text": "お互い暇だろ？ちょっと話そう。"
         }
       ],
       "nextSequenceId": "INTERROGATION_INTRO_END"
@@ -141,7 +151,12 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "質問をぶつけるしかなさそうだ"
+          "text": "看守が何かを隠しているのは間違いない。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "質問をぶつけるしかなさそうだ。"
         }
       ],
       "nextSequenceId": ""
@@ -203,24 +218,24 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "一本の鉛筆を最後まで使い切るなら、こんな中途半端に長い鉛筆を作るはずがない。"
+          "text": "二本とも使いかけなのに、長さが極端に違う。"
         },
         {
           "type": "line",
           "speaker": "narration",
-          "text": "逆に複数本使うならこんな不均等にはならないはずだ。"
+          "text": "もしかすると、使っていた人が違うのではないだろうか。"
         },
         {
           "type": "choice",
           "options": [
             {
               "id": "a",
-              "label": "人が二人いたんじゃないのか？",
+              "label": "人が二人いたのか？",
               "nextSequenceId": "QUESTION_ITEM_01_TONE_A"
             },
             {
               "id": "b",
-              "label": "この牢に二人、人がいたはずです。",
+              "label": "この部屋に複数人いたな？",
               "nextSequenceId": "QUESTION_ITEM_01_TONE_B"
             }
           ]
@@ -234,7 +249,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "人が二人いたんじゃないのか？"
+          "text": "人が二人いたのか？"
         }
       ],
       "nextSequenceId": "QUESTION_ITEM_01_RESULT"
@@ -245,7 +260,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "この牢に二人、人がいたはずです。"
+          "text": "この部屋に複数人いたな？"
         }
       ],
       "nextSequenceId": "QUESTION_ITEM_01_RESULT"
@@ -277,19 +292,19 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "落書きを書いた人物がいたはずだ。"
+          "text": "落書きを書いた人物がいるはずだ。"
         },
         {
           "type": "choice",
           "options": [
             {
               "id": "a",
-              "label": "この牢は自分だけじゃないのか？",
+              "label": "この部屋にいるのは自分だけじゃないのか？",
               "nextSequenceId": "QUESTION_ITEM_02_TONE_A"
             },
             {
               "id": "b",
-              "label": "過去に誰かいたのでは？",
+              "label": "絵がうまい人間がいたのか？",
               "nextSequenceId": "QUESTION_ITEM_02_TONE_B"
             }
           ]
@@ -303,7 +318,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "この牢は自分だけじゃないのか？"
+          "text": "この部屋にいるのは自分だけじゃないのか？"
         }
       ],
       "nextSequenceId": "QUESTION_ITEM_02_RESULT"
@@ -314,7 +329,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "過去に誰かいたのでは？"
+          "text": "絵がうまい人間がいたのか？"
         }
       ],
       "nextSequenceId": "QUESTION_ITEM_02_RESULT"
@@ -330,7 +345,7 @@
         {
           "type": "line",
           "speaker": "guard",
-          "text": "今は一人なのだからどうでもいいことだろう。"
+          "text": "今はお前一人なのだからどうでもいいことだろう。"
         }
       ],
       "nextSequenceId": ""
@@ -351,19 +366,19 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "的確な指摘ができれば、看守がボロを出すかもしれない。"
+          "text": "的確な指摘ができれば、看守から有益な情報を聞けるかもしれない。"
         },
         {
           "type": "choice",
           "options": [
             {
               "id": "a",
-              "label": "使わなくなったという感じがしない。",
+              "label": "見た目のわりに、使わなくなったという感じがしない。",
               "nextSequenceId": "QUESTION_ITEM_03_TONE_A"
             },
             {
               "id": "b",
-              "label": "おさがりだったのでは？",
+              "label": "使い古した物のようだったが、誰かのおさがりだったのか？",
               "nextSequenceId": "QUESTION_ITEM_03_TONE_B"
             }
           ]
@@ -377,7 +392,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "使わなくなったという感じがしない。"
+          "text": "見た目のわりに、使わなくなったという感じがしない。"
         }
       ],
       "nextSequenceId": "QUESTION_ITEM_03_RESULT"
@@ -388,7 +403,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "おさがりだったのでは？"
+          "text": "使い古した物のようだったが、誰かのおさがりだったのか？"
         }
       ],
       "nextSequenceId": "QUESTION_ITEM_03_RESULT"
@@ -399,7 +414,7 @@
         {
           "type": "line",
           "speaker": "guard",
-          "text": "ッ！！！"
+          "text": "うるさい...！"
         }
       ],
       "nextSequenceId": ""
@@ -420,7 +435,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "目覚まし時計を使っていた人物がいたはずだ。"
+          "text": "目覚まし時計を使っていた人物がいるはずだ。"
         },
         {
           "type": "choice",
@@ -432,7 +447,7 @@
             },
             {
               "id": "b",
-              "label": "時計が止まっているでしょう。過去に誰かいたのでは？",
+              "label": "時計が止まっている。過去に誰かいたのでは？",
               "nextSequenceId": "QUESTION_ITEM_04_TONE_B"
             }
           ]
@@ -457,7 +472,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "時計が止まっているでしょう。過去に誰かいたのでは？"
+          "text": "時計が止まっている。過去に誰かいたのでは？"
         }
       ],
       "nextSequenceId": "QUESTION_ITEM_04_RESULT"
@@ -468,7 +483,7 @@
         {
           "type": "line",
           "speaker": "guard",
-          "text": "お前以外の誰かだろう。それを気にする必要がどこにある？"
+          "text": "もういないのだから、気にする必要はない。"
         }
       ],
       "nextSequenceId": ""
@@ -484,12 +499,12 @@
         {
           "type": "line",
           "speaker": "guard",
-          "text": "どうせ出られないのだから外の世界を気にしてどうする。"
+          "text": "どうせ出られないのだから、外の世界を気にしてどうする。"
         },
         {
           "type": "line",
           "speaker": "narration",
-          "text": "この牢獄に関わる話が聞けるかもしれない。"
+          "text": "男が「牢」と呼ぶこの部屋に関わる話が聞けるかもしれない。"
         },
         {
           "type": "choice",
@@ -565,12 +580,12 @@
           "options": [
             {
               "id": "a",
-              "label": "塗りつぶされた名前に見覚えがある気がする。",
+              "label": "なぜ名前が塗りつぶされている？",
               "nextSequenceId": "QUESTION_ITEM_06_TONE_A"
             },
             {
               "id": "b",
-              "label": "なぜ丁寧に飾って置いているのです？",
+              "label": "なぜ丁寧に飾って置いている？",
               "nextSequenceId": "QUESTION_ITEM_06_TONE_B"
             }
           ]
@@ -584,7 +599,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "塗りつぶされた名前に見覚えがある気がする。"
+          "text": "なぜ名前が塗りつぶされている？"
         }
       ],
       "nextSequenceId": "QUESTION_ITEM_06_RESULT"
@@ -595,7 +610,7 @@
         {
           "type": "line",
           "speaker": "hero",
-          "text": "なぜ丁寧に飾って置いているのです？"
+          "text": "なぜ丁寧に飾って置いている？"
         }
       ],
       "nextSequenceId": "QUESTION_ITEM_06_RESULT"
@@ -606,7 +621,7 @@
         {
           "type": "line",
           "speaker": "guard",
-          "text": "ッ！！！"
+          "text": "黙れ...。"
         }
       ],
       "nextSequenceId": ""
@@ -638,7 +653,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "もう一押し揺さぶりをかけてみよう。"
+          "text": "もう一押し、揺さぶりをかけてみよう。"
         }
       ],
       "nextSequenceId": ""

@@ -15,19 +15,19 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "看守は激昂し、質問攻めを制止させた。"
+          "text": "看守は激昂し、こちらの質問を遮った。"
         },
         {
           "type": "line",
           "speaker": "guard",
-          "text": "何にも知らないまま、”いつも”俺に嫌がらせして行くんだろう！？もううんざりだ！",
+          "text": "何にも知らないまま、「いつも」俺に嫌がらせして行くんだろう！？もううんざりだ！",
           "expressionId": "GUARD_05",
           "speakerName": "看守"
         },
         {
           "type": "line",
           "speaker": "hero",
-          "text": "”いつも”...？"
+          "text": "「いつも」...？"
         },
         {
           "type": "line",
@@ -56,7 +56,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "看守の言葉に、明確な疑問を抱いているはずなのに、窓の向こうに見える海面から目が離せない。"
+          "text": "看守の言葉に明確な疑問を抱いているはずなのに、窓の向こうに見える海面から目が離せない。"
         },
         {
           "type": "line",
@@ -96,7 +96,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "海の底へ向かって沈んでいき、海面に見える光が遠のいていく。"
+          "text": "海の中へ溶けるように沈んでいき、海面に見える光が遠のいていく。"
         },
         {
           "type": "line",
@@ -112,12 +112,17 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "暗い部屋で一人目を覚ます。まだ深夜くらいだろうか。"
+          "text": "深夜くらいの暗い部屋で一人、目を覚ます。"
         },
         {
           "type": "line",
           "speaker": "hero",
           "text": "うわ...寝汗がすごいな。悪夢でも見たか？"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "べっとりと肌に吸い付く寝巻の感触に、形容しがたい不快感を覚える。"
         },
         {
           "type": "line",
@@ -127,12 +132,17 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "ベッドから降りて、新しい寝巻を取り出す。汗に冷やされて少し肌寒かった。"
+          "text": "ベッドから降りて、新しい寝巻を取り出す。"
         },
         {
           "type": "line",
           "speaker": "narration",
-          "text": "BadEnd「はじまり」"
+          "text": "汗に冷やされて少し肌寒かった。"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "End「はじまり」"
         }
       ],
       "nextSequenceId": ""

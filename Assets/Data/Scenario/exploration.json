@@ -8,6 +8,12 @@
           "speaker": "narration",
           "text": "部屋全体の見た目は見覚えがあるような、無いような、不思議な感覚を覚える。",
           "backgroundId": "BG_03"
+        },
+        {
+          "type": "line",
+          "speaker": "narration",
+          "text": "気になるところを調べよう。",
+          "backgroundId": "BG_03"
         }
       ],
       "nextSequenceId": ""
@@ -46,7 +52,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "ヒーローものの落書きのようだ。"
+          "text": "何かヒーローのような落書きだ。"
         },
         {
           "type": "line",
@@ -62,7 +68,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "子供用の二段ベッドのようだ。なぜこんなところに...？",
+          "text": "子供用の二段ベッドのようだ。一段目には物が散乱している。",
           "backgroundId": "BG_06"
         }
       ],
@@ -79,7 +85,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "整理されているとは言えそうにない。"
+          "text": "整理されてはないが、使い古された印象を受ける。"
         }
       ],
       "nextSequenceId": ""
@@ -118,7 +124,7 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "はるか遠くまで水平線が続いている。"
+          "text": "はるか遠くまでまっすぐに水平線が続いている。"
         },
         {
           "type": "line",
@@ -134,12 +140,12 @@
         {
           "type": "line",
           "speaker": "narration",
-          "text": "誰かの表彰状のようだ。"
+          "text": "何かの表彰状のようだ。"
         },
         {
           "type": "line",
           "speaker": "narration",
-          "text": "詳細は分からないが、習字コンクールで受賞した誰かがいたのだろうか。"
+          "text": "名前は分からないが、習字コンクールで受賞した誰かがいたのだろうか。"
         }
       ],
       "nextSequenceId": ""
